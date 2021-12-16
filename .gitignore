@@ -6,6 +6,20 @@ __pycache__/
 # C extensions
 *.so
 
+# vim swp
+*.swp
+
+# dh-virtualenv
+.pybuild/
+debian/.debhelper/
+debian/files
+debian/wlanpi-platform-testing.postrm.debhelper
+debian/wlanpi-platform-testing.postinst.debhelper
+debian/wlanpi-platform-testing.prerm.debhelper
+debian/wlanpi-platform-testing.substvars
+debian/wlanpi-platform-testing/
+
+
 # Distribution / packaging
 .Python
 build/
