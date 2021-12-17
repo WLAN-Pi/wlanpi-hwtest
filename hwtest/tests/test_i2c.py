@@ -1,7 +1,7 @@
 from hwtest.helpers import run_command
 import subprocess
 
-def i2c_present():
+def i2c_module_present():
     '''
     Use modinfo to check if i2c module is loaded
     '''
@@ -12,7 +12,7 @@ def i2c_present():
     except subprocess.CalledProcessError as exc:
         return False
 
-def test_i2c_present():
+def test_i2c_module_present():
     """
     Test command:
         lsmod | grep i2c
@@ -22,7 +22,7 @@ def test_i2c_present():
         False - not detected
     """
 
-    assert i2c_present() == True
+    assert i2c_module_present() == True
 
 # enable i2c: sudo raspi-config nonint do_i2c 0
 # disable i2c: sudo raspi-config nonint do_i2c 1
