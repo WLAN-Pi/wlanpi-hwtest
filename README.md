@@ -1,11 +1,11 @@
-# wlanpi-platform-testing
+# wlanpi-hwcheck
 
 ## usage
 
 ```
-usage: platformtesting [-h] [--debug] [--version]
+usage: hwcheck [-h] [--debug] [--version]
 
-wlanpi-platform-testing is a verification tool for the WLAN Pi Pro
+wlanpi-hwcheck is a verification tool for the WLAN Pi Pro
 
 optional arguments:
   -h, --help     show this help message and exit
