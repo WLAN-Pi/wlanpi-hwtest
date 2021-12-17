@@ -1,9 +1,10 @@
-import subprocess 
+import subprocess
 
-def is_module_present(module: str ) -> bool:
-    '''
+
+def is_module_present(module: str) -> bool:
+    """
     Use modinfo to check if module is loaded
-    '''
+    """
     try:
         cmd = f"lsmod | grep {module}"
         subprocess.check_output(cmd, shell=True)

@@ -19,6 +19,7 @@ Architecture: any
 Pre-Depends: dpkg (>= 1.16.1), python3 (>=3.7), python3-distutils, ${misc:Pre-Depends}
 Depends: ${misc:Depends},
          raspi-config,
-         bluez-tools
+         bluez-tools,
+         util-linux
 Description: Platform testing tools
  wlanpi-hwtest provides a suite of tests to verify functionality on the WLAN Pi Pro hardware.
