@@ -18,7 +18,7 @@ try:
 except FileNotFoundError:
     readme = about["__description__"]
 
-requires = ["pytest", "textfsm", "tox"]
+requires = ["pytest", "pytest-html", "textfsm", "tox"]
 
 setup(
     name=about["__title__"],
