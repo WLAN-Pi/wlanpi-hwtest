@@ -1,4 +1,5 @@
-from platformtesting.helpers import run_command
+from hwtest.helpers import run_command
+
 
 def test_usb_hub():
     """

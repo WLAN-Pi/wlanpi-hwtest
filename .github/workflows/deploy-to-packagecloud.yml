@@ -38,7 +38,7 @@ jobs:
       - name: Archive artifacts and upload to GitHub
         uses: actions/upload-artifact@v2
         with:
-          name: wlanpi-platform-testing-${{ matrix.distro }}-${{ matrix.arch }}
+          name: wlanpi-hwtest-${{ matrix.distro }}-${{ matrix.arch }}
           path: ${{ steps.build-debian-package.outputs.deb-package }}
 
       - name: Upload package to packagecloud

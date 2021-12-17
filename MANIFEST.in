@@ -1,1 +1,1 @@
-include platformtesting/pytest.ini
+include hwtest/pytest.ini

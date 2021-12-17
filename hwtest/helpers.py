@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 #
-# wlanpi-platform-testing : verification tools for the WLAN Pi Pro
+# wlanpi-hwtest : verification tools for the WLAN Pi Pro
 # Copyright : (c) 2021 WLAN Pi Project
 # License : MIT
 
 """
-wlanpi-platform-testing.helpers
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wlanpi-hwtest.helpers
+~~~~~~~~~~~~~~~~~~~~~
 
 provides functions which help setup the app.
 """
@@ -16,20 +16,14 @@ import argparse
 import logging
 import logging.config
 import shutil
-import sys
-import subprocess
 import signal
+import subprocess
+import sys
 
 # app imports
 from .__version__ import __version__
 
-
-__tools = [
-    "lspci",
-    "lsusb",
-    "modprobe",
-    "modinfo"
-]
+__tools = ["lspci", "lsusb", "modprobe", "modinfo"]
 
 # are the required tools installed?
 for tool in __tools:
@@ -42,7 +36,7 @@ for tool in __tools:
 def setup_logger(args) -> None:
     """Configure and set logging levels"""
     logging_level = logging.INFO
-    
+
     if args.debug:
         logging_level = logging.DEBUG
 
@@ -64,11 +58,12 @@ def setup_logger(args) -> None:
     }
     logging.config.dictConfig(default_logging)
 
+
 def setup_parser() -> argparse.ArgumentParser:
     """Set default values and handle arg parser"""
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        description="wlanpi-platform-testing is a verification tool for the WLAN Pi Pro",
+        description="wlanpi-hwtest is a verification tool for the WLAN Pi Pro",
     )
     parser.add_argument(
         "--debug",
@@ -79,6 +74,7 @@ def setup_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--version", "-V", action="version", version=f"{__version__}")
     return parser
+
 
 def run_command(cmd: list, suppress_output=False) -> str:
     """Run a single CLI command with subprocess and return stdout or stderr response"""

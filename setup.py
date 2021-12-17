@@ -9,7 +9,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 
 # load the package's __version__.py module as a dictionary
 about = {}
-with open(os.path.join(here, "platformtesting", "__version__.py"), "r", "utf-8") as f:
+with open(os.path.join(here, "hwtest", "__version__.py"), "r", "utf-8") as f:
     exec(f.read(), about)
 
 try:
@@ -18,7 +18,7 @@ try:
 except FileNotFoundError:
     readme = about["__description__"]
 
-requires = ["pytest", "textfsm"]
+requires = ["pytest", "textfsm", "tox"]
 
 setup(
     name=about["__title__"],
@@ -41,9 +41,9 @@ setup(
     packages=find_packages(),
     project_urls={
         "Documentation": "https://docs.wlanpi.com",
-        "Source": "https://github.com/wlan-pi/wlanpi-platform-testing",
+        "Source": "https://github.com/wlan-pi/wlanpi-hwtest",
     },
     include_package_data=True,
     install_requires=requires,
-    entry_points={"console_scripts": ["platformtesting=platformtesting.__main__:main"]},
+    entry_points={"console_scripts": ["hwtest=hwtest.__main__:main"]},
 )

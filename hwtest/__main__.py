@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 #
-# wlanpi-platform-testing : verification tools for the WLAN Pi Pro
+# wlanpi-hwtest : verification tools for the WLAN Pi Pro
 # Copyright : (c) 2021 WLAN Pi Project
 # License : MIT
 
 """
-wlanpi-platform-testing
-~~~~~~~~~~~~~~~~~~~~~~~
+wlanpi-hwtest.__main__.py
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Entry point
 """

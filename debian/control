@@ -1,4 +1,4 @@
-Source: wlanpi-platform-testing
+Source: wlanpi-hwtest
 Section: contrib/python
 Priority: optional
 Maintainer: Josh Schmelzle <josh@joshschmelzle.com>
@@ -12,12 +12,12 @@ Build-Depends: debhelper (>= 11),
                python3-venv
 Standards-Version: 4.6.0
 X-Python3-Version: >= 3.7
-Homepage: https://github.com/WLAN-Pi/wlanpi-platform-testing
+Homepage: https://github.com/WLAN-Pi/wlanpi-hwtest
 
-Package: wlanpi-platform-testing
+Package: wlanpi-hwtest
 Architecture: any
 Pre-Depends: dpkg (>= 1.16.1), python3 (>=3.7), python3-distutils, ${misc:Pre-Depends}
 Depends: ${misc:Depends},
          raspi-config
 Description: Platform testing tools
- wlanpi-platform-testing provides a suite of tests to verify functionality on the WLAN Pi Pro hardware.
+ wlanpi-hwtest provides a suite of tests to verify functionality on the WLAN Pi Pro hardware.
