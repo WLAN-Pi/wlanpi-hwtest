@@ -1,5 +1,4 @@
-from hwtest.helpers import run_command
-from hwtest.tests.helpers import is_module_present
+from hwtest.tests.helpers import is_module_present, run_command
 
 
 def test_rtc_pcf85063_module_present():
@@ -15,7 +14,7 @@ def test_rtc_pcf85063_module_present():
     assert is_module_present("rtc_pcf85063") == True
 
 
-def test_rtc_enabled():
+def test_rtc_clock_tick():
     """
     Test command:
         hwclock -v

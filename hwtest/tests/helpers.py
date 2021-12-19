@@ -1,13 +1,49 @@
+# -*- coding: utf-8 -*-
+#
+# wlanpi-hwtest : verification tools for the WLAN Pi Pro
+# Copyright : (c) 2021 WLAN Pi Project
+# License : MIT
+
+"""
+wlanpi-hwtest.tests.helpers
+~~~~~~~~~~~~~~~~~~~~~
+
+provides functions which help provide consistency across tests 
+"""
+
 import subprocess
 
 
 def is_module_present(module: str) -> bool:
     """
-    Use modinfo to check if module is loaded
+    Use modinfo to check if a provided module is loaded
+
+    If output is found, return True.
+
+    If no output is found, return False.
     """
     try:
         cmd = f"lsmod | grep {module}"
         subprocess.check_output(cmd, shell=True)
         return True
-    except subprocess.CalledProcessError as exc:
+    except subprocess.CalledProcessError as _error:
         return False
+
+
+def run_command(cmd: list, suppress_output=False) -> str:
+    """Run a single CLI command with subprocess and return stdout or stderr response"""
+    cp = subprocess.run(
+        cmd,
+        encoding="utf-8",
+        shell=False,
+        check=False,
+        capture_output=True,
+    )
+
+    if not suppress_output:
+        if cp.stdout:
+            return cp.stdout.strip()
+        if cp.stderr:
+            return cp.stderr.strip()
+
+    return "completed process return code is non-zero with no stdout or stderr"

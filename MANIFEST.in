@@ -1,1 +1,2 @@
 include hwtest/pytest.ini
+graft hwtest/templates

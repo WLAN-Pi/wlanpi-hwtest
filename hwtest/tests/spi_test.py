@@ -1,4 +1,4 @@
-from hwtest.helpers import run_command
+from hwtest.tests.helpers import run_command
 
 
 def test_spi_enabled():

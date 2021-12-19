@@ -1,5 +1,4 @@
-from hwtest.helpers import run_command
-from hwtest.tests.helpers import is_module_present
+from hwtest.tests.helpers import is_module_present, run_command
 
 
 def test_i2c_module_present():
