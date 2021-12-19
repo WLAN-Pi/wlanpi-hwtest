@@ -1,5 +1,5 @@
-wlanpi-hwtest (1.0.0) UNRELEASED; urgency=medium
+wlanpi-hwtest (1.0.1) UNRELEASED; urgency=medium
 
   * Initial release.
 
- -- Josh Schmelzle <josh@joshschmelzle.com>  Thu, 16 Dec 2021 00:44:22 -0500
+ -- Josh Schmelzle <josh@joshschmelzle.com>  Sun, 19 Dec 2021 12:09:48 -0500
