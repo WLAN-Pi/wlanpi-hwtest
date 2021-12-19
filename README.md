@@ -1,11 +1,11 @@
-# wlanpi-hwcheck
+# wlanpi-hwtest
 
 ## usage
 
 ```
-usage: hwcheck [-h] [--debug] [--version]
+usage: hwtest [-h] [--debug] [--version]
 
-wlanpi-hwcheck is a verification tool for the WLAN Pi Pro
+wlanpi-hwtest is a verification tool for the WLAN Pi Pro
 
 optional arguments:
   -h, --help     show this help message and exit
