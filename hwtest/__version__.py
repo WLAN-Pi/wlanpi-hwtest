@@ -13,11 +13,11 @@
 
 """ version information for wlanpi-hwtest """
 
-__title__ = "profiler"
+__title__ = "hwtest"
 __description__ = "platform testing tools for the WLAN Pi Pro"
 __url__ = "https://github.com/wlan-pi/wlanpi-hwtest"
 __author__ = "Josh Schmelzle"
 __author_email__ = "josh@joshschmelzle.com"
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __status__ = "alpha"
 __license__ = "MIT"
