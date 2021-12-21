@@ -18,8 +18,18 @@ try:
 except FileNotFoundError:
     readme = about["__description__"]
 
-requires = ["pytest", "pytest-html", "textfsm", "tox"]
+extras = {
+    "development": [
+        "black",
+        "isort",
+        "mypy",
+        "flake8",
+        "pytest",
+    ],
+}
 
+# fmt: off
+# Pillow must be on its own line otherwise Debian packaging will fail
 setup(
     name=about["__title__"],
     version=about["__version__"],
@@ -44,6 +54,15 @@ setup(
         "Source": "https://github.com/wlan-pi/wlanpi-hwtest",
     },
     include_package_data=True,
-    install_requires=requires,
+    extras_require=extras,
+    install_requires=[
+        "pytest",
+        "pytest-html",
+        "luma.oled==3.8.1",
+        "rpi.gpio==0.7.1a4",
+        "gpiozero==1.6.2",
+        "textfsm==1.1.2",
+        "Pillow==8.4.0", 
+    ],
     entry_points={"console_scripts": ["hwtest=hwtest.__main__:main"]},
 )
