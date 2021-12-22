@@ -1,7 +1,4 @@
-import os
 from typing import List
-
-import textfsm
 
 from hwtest.tests.helpers import run_command
 
@@ -19,7 +16,7 @@ def _expected_lspci_resp():
     """
 
 
-def parse_lspci_for_PI7C9X2G404() -> List:
+def lookup_lspci(target: str) -> List:
     # get lspci output
     lspci = run_command(["lspci"])
 
@@ -34,12 +31,12 @@ def parse_lspci_for_PI7C9X2G404() -> List:
 
 def test_PI7C9X2G404_packet_switches():
     """
-    Test `lspci` output for 4x PI7C9X2G404
+    Test presence of 4x PI7C9X2G404 packet switches in lspci output
     """
 
-    PI7C9X2G404s = parse_lspci_for_PI7C9X2G404()
+    pcie_packet_switches = lookup_lspci("PI7C9X2G404")
 
-    assert len(PI7C9X2G404s) == 4
+    assert len(pcie_packet_switches) == 4
 
 
 def test_vl_805_usb3_host_controller():
