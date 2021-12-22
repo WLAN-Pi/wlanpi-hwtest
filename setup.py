@@ -58,6 +58,7 @@ setup(
     install_requires=[
         "pytest",
         "pytest-html",
+        "pytest-json-report",
         "luma.oled==3.8.1",
         "rpi.gpio==0.7.1a4",
         "gpiozero==1.6.2",
