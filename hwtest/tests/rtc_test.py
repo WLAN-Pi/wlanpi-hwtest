@@ -14,15 +14,18 @@ def test_rtc_pcf85063_mod():
     assert is_module_present("rtc_pcf85063") == True
 
 
-def test_rtc_clock_tick():
+def test_rtc_hwclock():
     """
     Test command:
-        hwclock -v
+        hwclock -r
 
     Expect:
-        "got clock tick" in resp
+        exit value is 0 (we got a timestamp)
+
+    Not Expected:
+        exit value is 1 (cannot access hardware clock for example)
     """
 
-    resp = run_command(["hwclock", "-v"])
+    exit_value = run_command(["hwclock", "-r"], return_exit_values=True)
 
-    assert "got clock tick" in resp.lower()
+    assert exit_value == 0

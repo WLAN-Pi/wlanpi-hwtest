@@ -30,7 +30,7 @@ def is_module_present(module: str) -> bool:
         return False
 
 
-def run_command(cmd: list, suppress_output=False) -> str:
+def run_command(cmd: list, suppress_output=False, return_exit_values=False) -> str:
     """Run a single CLI command with subprocess and return stdout or stderr response"""
     cp = subprocess.run(
         cmd,
@@ -39,6 +39,9 @@ def run_command(cmd: list, suppress_output=False) -> str:
         check=False,
         capture_output=True,
     )
+
+    if return_exit_values:
+        return cp.returncode
 
     if not suppress_output:
         if cp.stdout:
