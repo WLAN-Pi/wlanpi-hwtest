@@ -1,0 +1,10 @@
+[Unit]
+Description=Front Panel Menu System for the WLAN Pi OLED display
+After=multi-user.target basic.target
+
+[Service]
+Type=idle
+ExecStart=/usr/sbin/hwtest
+
+[Install]
+WantedBy=multi-user.target
