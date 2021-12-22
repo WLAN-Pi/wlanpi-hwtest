@@ -29,7 +29,7 @@ def lookup_lspci(target: str) -> List:
     return hits
 
 
-def test_PI7C9X2G404_packet_switches():
+def test_4x_PI7C9X2G404():
     """
     Test presence of 4x PI7C9X2G404 packet switches in lspci output
     """
@@ -39,7 +39,7 @@ def test_PI7C9X2G404_packet_switches():
     assert len(pcie_packet_switches) == 4
 
 
-def test_vl_805_usb3_host_controller():
+def test_vl805_usb3ctlr():
     """
     Test for VL805 USB 3.0 Host Controller in `lspci` output
     """
@@ -49,7 +49,7 @@ def test_vl_805_usb3_host_controller():
     assert "VL805" in resp
 
 
-def test_usb3_hub():
+def test_linux_usb3hub():
     """
     Test for Linux Foundation 3.0 root hub in `lsusb` output
     """

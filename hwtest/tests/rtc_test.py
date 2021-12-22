@@ -1,7 +1,7 @@
 from hwtest.tests.helpers import is_module_present, run_command
 
 
-def test_rtc_pcf85063_module_present():
+def test_rtc_pcf85063_mod():
     """
     Test command:
         lsmod | grep rtc_pcf85063

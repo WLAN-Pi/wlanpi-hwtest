@@ -1,7 +1,7 @@
 from hwtest.tests.helpers import is_module_present, run_command
 
 
-def test_i2c_module_present():
+def test_i2c_mod():
     """
     Test command:
         lsmod | grep i2c

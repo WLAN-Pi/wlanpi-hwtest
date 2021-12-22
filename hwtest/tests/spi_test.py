@@ -1,7 +1,7 @@
 from hwtest.tests.helpers import is_module_present, run_command
 
 
-def test_spi_module_present():
+def test_spi_mod():
     """
     Test command:
         lsmod | grep spi_bcm

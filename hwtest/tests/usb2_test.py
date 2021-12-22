@@ -1,7 +1,7 @@
 from hwtest.tests.helpers import is_module_present, run_command
 
 
-def test_usb2_hub():
+def test_linux_usb2hub():
     """
     Test for Linux Foundation 2.0 root hub in `lsusb` output
     """
@@ -11,7 +11,7 @@ def test_usb2_hub():
     assert "1d6b:0002" in resp
 
 
-def test_g_ether_module_present():
+def test_g_ether_mod():
     """
     Test command:
         lsmod | grep g_ether

@@ -1,7 +1,7 @@
 from hwtest.tests.helpers import is_module_present, run_command
 
 
-def test_bluetooth_module_present():
+def test_bt_mod():
     """
     Test command:
         lsmod | grep bluetooth
@@ -14,7 +14,7 @@ def test_bluetooth_module_present():
     assert is_module_present("bluetooth") == True
 
 
-def test_bluetooth_device_present():
+def test_bt_device_present():
     """
     Test command:
         hciconfig | grep hci*
