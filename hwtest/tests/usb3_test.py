@@ -1,11 +1,12 @@
 import os
+from typing import List
 
 import textfsm
 
 from hwtest.tests.helpers import run_command
 
 
-def fake_lspci_resp():
+def _expected_lspci_resp():
     return """
 00:00.0 PCI bridge: Broadcom Inc. and subsidiaries BCM2711 PCIe Bridge (rev 20)
 01:00.0 PCI bridge: Pericom Semiconductor PI7C9X2G404 EL/SL PCIe2 4-Port/4-Lane Packet Switch (rev 05)
@@ -18,19 +19,17 @@ def fake_lspci_resp():
     """
 
 
-def parse_lpsci_for_PI7C9X2G404() -> str:
+def parse_lspci_for_PI7C9X2G404() -> List:
     # get lspci output
     lspci = run_command(["lspci"])
 
-    # load textfsm template to parse iw output
-    here = os.path.abspath(os.path.dirname(__file__))
+    hits = []
+    target = "PI7C9X2G404"
+    for line in lspci.splitlines():
+        if target in line:
+            hits.append(line)
 
-    textfsm_template_file = os.path.join(here, "../templates/PI7C9X2G404.textfsm")
-    with open(textfsm_template_file) as f:
-        packet_switches = textfsm.TextFSM(f)
-
-    # parse and return lspci response for PI7C9X2G404
-    return packet_switches.ParseText(lspci)
+    return hits
 
 
 def test_PI7C9X2G404_packet_switches():
@@ -38,7 +37,7 @@ def test_PI7C9X2G404_packet_switches():
     Test `lspci` output for 4x PI7C9X2G404
     """
 
-    PI7C9X2G404s = parse_lpsci_for_PI7C9X2G404()
+    PI7C9X2G404s = parse_lspci_for_PI7C9X2G404()
 
     assert len(PI7C9X2G404s) == 4
 
