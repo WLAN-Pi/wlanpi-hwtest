@@ -160,9 +160,9 @@ def draw_tests(test_results):
             totals[result] += 1
         draw(f"{result}: {name}")
 
-    fail_count = totals.get("FAIL")
-    ok_count = totals.get("OK")
-    usage_count = totals.get("USAGE")
+    fail_count = int(totals.get("FAIL", 0))
+    ok_count = int(totals.get("OK", 0))
+    usage_count = int(totals.get("USAGE", 0))
     if fail_count > 0:
         draw(f"{fail_count} OF {counter} FAILED!")
     elif ok_count == counter:
