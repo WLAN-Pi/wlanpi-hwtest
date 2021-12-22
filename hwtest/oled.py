@@ -38,10 +38,7 @@ WIDTH = "128"
 HEIGHT = "128"
 COLOR_ORDER_BGR = True
 
-
 HEIGHT_OFFSET = 64
-MAX_TABLE_LINES = 9
-MAX_PAGE_LINES = 8
 DISPLAY_MODE = "RGB"
 
 PAGE_SLEEP = 300  # Time in secs before sleep
@@ -50,18 +47,6 @@ PAGE_HEIGHT = 64 + HEIGHT_OFFSET  # Pixel size of screen height
 NAV_BAR_TOP = 54 + HEIGHT_OFFSET  # Top pixel number of nav bar
 STATUS_BAR_HEIGHT = 16
 SYSTEM_BAR_HEIGHT = 15
-
-# Define display fonts
-# SMART_FONT = ImageFont.truetype("fonts/DejaVuSansMono-Bold.ttf", 10)
-# FONT11 = ImageFont.truetype("fonts/DejaVuSansMono.ttf", 11)
-# FONT12 = ImageFont.truetype("fonts/DejaVuSansMono.ttf", 12)
-# FONT13 = ImageFont.truetype("fonts/DejaVuSansMono.ttf", 13)
-# FONT14 = ImageFont.truetype("fonts/DejaVuSansMono.ttf", 14)
-# FONTB11 = ImageFont.truetype("fonts/DejaVuSansMono-Bold.ttf", 11)
-# FONTB12 = ImageFont.truetype("fonts/DejaVuSansMono-Bold.ttf", 12)
-# FONTB13 = ImageFont.truetype("fonts/DejaVuSansMono-Bold.ttf", 13)
-# FONTB14 = ImageFont.truetype("fonts/DejaVuSansMono-Bold.ttf", 14)
-# ICONS = ImageFont.truetype("fonts/ionicons.ttf", 13)
 
 # Button mapping (WLANPi Pro)
 BUTTONS_WLANPI_PRO = {

@@ -82,9 +82,9 @@ def start(args: argparse.Namespace):
 
     # run each test individually and then draw results to oled
     init_oled()
-    setup_luma_terminal()
-    results = run_tests()
-    draw_tests(results)
+    init_luma_terminal()
+    results = run_pytests()
+    draw_test_results(results)
 
     # keep main thread up until stopped by sigint or something else
     while RUNNING:
@@ -92,22 +92,24 @@ def start(args: argparse.Namespace):
 
 
 def init_oled():
-    """init our oled object"""
+    """initialize our oled object"""
     log = logging.getLogger(inspect.stack()[0][3])
     log.debug("oled.init")
     oled.init()
 
 
-def setup_luma_terminal():
-    """draw terminal test"""
+def init_luma_terminal():
+    """initialize terminal test"""
     log = logging.getLogger(inspect.stack()[0][3])
-    log.debug("draw_terminal")
+    log.debug("init luma terminal")
     device = oled.device
     global TERMINAL
     TERMINAL = terminal(device)
 
 
-def run_tests():
+def run_pytests():
+    """run the tests"""
+    log = logging.getLogger(inspect.stack()[0][3])
     results = []
     counter = 0
     TERMINAL.println(f"WLANPI HWTEST {__version__}")
@@ -126,9 +128,9 @@ def run_tests():
     return results
 
 
-def format_exit_code(exit_code: str) -> str:
+def format_pytest_return_code(retcode: str) -> str:
     return (
-        exit_code.strip()
+        retcode.strip()
         .replace("ExitCode.", "")
         .replace("TESTS_", "")
         .replace("FAILED", "FAIL")
@@ -136,47 +138,43 @@ def format_exit_code(exit_code: str) -> str:
     )
 
 
-def format_test_out(test: str) -> str:
-    return test.strip().replace("test_", "")
+def format_test_stub_output(test_name: str) -> str:
+    return test_name.strip().replace("test_", "")
 
 
-def perform_tests(file: str, test: str):
-    retcode = pytest.main([f"{HERE}/{file}::{test}"])
-    result = format_exit_code(str(retcode))
-    test = format_test_out(test)
-    return (result, test)
+def perform_tests(file: str, test_stub: str):
+    retcode = pytest.main([f"{HERE}/{file}::{test_stub}"])
+    result = format_pytest_return_code(str(retcode))
+    test_stub = format_test_stub_output(test_stub)
+    return (result, test_stub)
 
 
-def draw_tests(test_results):
+def draw_test_results(test_results):
     totals = {}
     counter = 0
     for test in test_results:
         counter += 1
         result = test[0]
-        name = test[1]
+        test_stub_name = test[1]
+        # track test results
         if result not in totals.keys():
             totals[result] = 1
         else:
             totals[result] += 1
-        draw(f"{result}: {name}")
+        TERMINAL.println(f"{result}: {test_stub_name}")
 
     fail_count = int(totals.get("FAIL", 0))
     ok_count = int(totals.get("OK", 0))
     usage_count = int(totals.get("USAGE", 0))
     if fail_count > 0:
-        draw(f"{fail_count} OF {counter} FAILED!")
+        TERMINAL.println(f"{fail_count} OF {counter} FAILED!")
     elif ok_count == counter:
-        draw(f"ALL {counter} TESTS PASSED")
+        TERMINAL.println(f"ALL {counter} TESTS PASSED")
     else:
-        draw("WARNING!")
-        draw(f"ONLY {ok_count} OF {counter} OK")
-        draw(f"{usage_count} OF {counter} HAVE PYTEST USAGE ERROR")
-
-
-def draw(out, empty_line_after=False):
-    TERMINAL.println(out)
-    if empty_line_after:
-        TERMINAL.println()
+        TERMINAL.println("WARNING!")
+        TERMINAL.println(f"ONLY {ok_count} OF {counter} OK")
+        TERMINAL.println("PYTEST USAGE ERROR:")
+        TERMINAL.println(f"{usage_count} OF {counter}")
 
 
 def now():
