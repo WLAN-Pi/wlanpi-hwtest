@@ -39,22 +39,7 @@ def are_we_root() -> bool:
 HERE = os.path.abspath(os.path.dirname(__file__))
 TERMINAL = None
 RUNNING = True
-DEFINITIONS = [
-    ("tests/bluetooth_test.py", "test_bt_mod"),
-    ("tests/bluetooth_test.py", "test_bt_device_present"),
-    ("tests/rtc_test.py", "test_rtc_pcf85063_mod"),
-    ("tests/rtc_test.py", "test_rtc_clock_tick"),
-    ("tests/pci_test.py", "test_pci_bridge"),
-    ("tests/i2c_test.py", "test_i2c_mod"),
-    ("tests/i2c_test.py", "test_i2c_enabled"),
-    ("tests/spi_test.py", "test_spi_enabled"),
-    ("tests/spi_test.py", "test_spi_mod"),
-    ("tests/usb2_test.py", "test_g_ether_mod"),
-    ("tests/usb2_test.py", "test_linux_usb2hub"),
-    ("tests/usb3_test.py", "test_4x_PI7C9X2G404"),
-    ("tests/usb3_test.py", "test_linux_usb3hub"),
-    ("tests/usb3_test.py", "test_vl805_usb3ctlr"),
-]
+DEFINITIONS = []
 
 
 def receiveSignal(signum, _frame):
@@ -82,9 +67,10 @@ def start(args: argparse.Namespace):
 
     # run each test individually and then draw results to oled
     init_oled()
+    init_test_definitions()
     init_luma_terminal()
     results = run_pytests()
-    draw_test_results(results)
+    print_test_results(results)
 
     # keep main thread up until stopped by sigint or something else
     while RUNNING:
@@ -106,6 +92,25 @@ def init_luma_terminal():
     global TERMINAL
     TERMINAL = terminal(device)
 
+def init_test_definitions():
+    """detect tests and add them to our definitions"""
+    global DEFINITIONS
+    DEFINITIONS = [
+        ("tests/bluetooth_test.py", "test_bt_mod"),
+        ("tests/bluetooth_test.py", "test_bt_device_present"),
+        ("tests/rtc_test.py", "test_rtc_pcf85063_mod"),
+        ("tests/rtc_test.py", "test_rtc_clock_tick"),
+        ("tests/pci_test.py", "test_pci_bridge"),
+        ("tests/i2c_test.py", "test_i2c_mod"),
+        ("tests/i2c_test.py", "test_i2c_enabled"),
+        ("tests/spi_test.py", "test_spi_enabled"),
+        ("tests/spi_test.py", "test_spi_mod"),
+        ("tests/usb2_test.py", "test_g_ether_mod"),
+        ("tests/usb2_test.py", "test_linux_usb2hub"),
+        ("tests/usb3_test.py", "test_4x_PI7C9X2G404"),
+        ("tests/usb3_test.py", "test_linux_usb3hub"),
+        ("tests/usb3_test.py", "test_vl805_usb3ctlr"),
+    ]
 
 def run_pytests():
     """run the tests"""
@@ -149,7 +154,7 @@ def perform_tests(file: str, test_stub: str):
     return (result, test_stub)
 
 
-def draw_test_results(test_results):
+def print_test_results(test_results):
     totals = {}
     counter = 0
     for test in test_results:
