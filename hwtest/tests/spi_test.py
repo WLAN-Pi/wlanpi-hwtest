@@ -1,4 +1,17 @@
-from hwtest.tests.helpers import run_command
+from hwtest.tests.helpers import is_module_present, run_command
+
+
+def test_spi_module_present():
+    """
+    Test command:
+        lsmod | grep spi_bcm
+
+    Results:
+        True - spi_bcm* module detected in lsmod
+        False - not detected
+    """
+
+    assert is_module_present("spi_bcm") == True
 
 
 def test_spi_enabled():
