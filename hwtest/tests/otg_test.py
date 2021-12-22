@@ -2,6 +2,7 @@ from hwtest.tests.helpers import is_module_present, run_command
 
 # Further reading: https://michael.stapelberg.ch/posts/2021-04-27-linux-usb-virtual-serial-cdc-acm/
 
+
 def test_RNDIS_gadget():
     """
     Test for idProduct 0xa4a2 Linux-USB Ethernet/RNDIS Gadget in `lsusb` output
