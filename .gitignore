@@ -16,11 +16,13 @@ __pycache__/
 .pybuild/
 debian/.debhelper/
 debian/files
-debian/wlanpi-platform-testing.postrm.debhelper
-debian/wlanpi-platform-testing.postinst.debhelper
-debian/wlanpi-platform-testing.prerm.debhelper
-debian/wlanpi-platform-testing.substvars
-debian/wlanpi-platform-testing/
+debian/wlanpi-hwtest.postinst.debhelper
+debian/wlanpi-hwtest.postrm.debhelper
+debian/wlanpi-hwtest.prerm.debhelper
+debian/wlanpi-hwtest.substvars
+debian/wlanpi-hwtest/
+wlanpi-hwtest-build-deps_*.buildinfo
+wlanpi-hwtest-build-deps_*.changes
 
 
 # Distribution / packaging
