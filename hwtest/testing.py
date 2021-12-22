@@ -19,10 +19,11 @@ import os
 import signal
 import sys
 from datetime import datetime
-from time import sleep
+from typing import Dict
 
 import pytest
 from luma.core.virtual import terminal
+from pytest_jsonreport.plugin import JSONReport
 
 from . import oled
 from .__version__ import __version__
@@ -52,6 +53,11 @@ def receiveSignal(signum, _frame):
 signal.signal(signal.SIGINT, receiveSignal)
 
 
+def now():
+    """yyyy-MM-ddThhmmss (1980-12-01T221030"""
+    return datetime.utcnow().strftime("%Y-%m-%dT%H%M%S")
+
+
 def start(args: argparse.Namespace):
     """Call pytest from our code"""
     log = logging.getLogger(inspect.stack()[0][3])
@@ -62,15 +68,11 @@ def start(args: argparse.Namespace):
         )
         sys.exit(-1)
 
-    # run all tests and generate html report for /var/log/hwtest/
-    run_pytest_main()
-
-    # run each test individually and then draw results to oled
     init_oled()
-    init_test_definitions()
     init_luma_terminal()
-    results = run_pytests()
-    print_test_results(results)
+    report = run_pytest()
+    print_pytest_outcomes(report.get("tests"))
+    print_pytest_summary(report.get("summary"))
 
     # keep main thread up until stopped by sigint or something else
     while RUNNING:
@@ -91,111 +93,56 @@ def init_luma_terminal():
     device = oled.device
     global TERMINAL
     TERMINAL = terminal(device)
-
-def init_test_definitions():
-    """detect tests and add them to our definitions"""
-    global DEFINITIONS
-    DEFINITIONS = [
-        ("tests/bluetooth_test.py", "test_bt_mod"),
-        ("tests/bluetooth_test.py", "test_bt_device_present"),
-        ("tests/rtc_test.py", "test_rtc_pcf85063_mod"),
-        ("tests/rtc_test.py", "test_rtc_clock_tick"),
-        ("tests/pci_test.py", "test_pci_bridge"),
-        ("tests/i2c_test.py", "test_i2c_mod"),
-        ("tests/i2c_test.py", "test_i2c_enabled"),
-        ("tests/spi_test.py", "test_spi_enabled"),
-        ("tests/spi_test.py", "test_spi_mod"),
-        ("tests/usb2_test.py", "test_g_ether_mod"),
-        ("tests/usb2_test.py", "test_linux_usb2hub"),
-        ("tests/usb3_test.py", "test_4x_PI7C9X2G404"),
-        ("tests/usb3_test.py", "test_linux_usb3hub"),
-        ("tests/usb3_test.py", "test_vl805_usb3ctlr"),
-    ]
-
-def run_pytests():
-    """run the tests"""
-    log = logging.getLogger(inspect.stack()[0][3])
-    results = []
-    counter = 0
     TERMINAL.println(f"WLANPI HWTEST {__version__}")
-    global DEFINITIONS
-    for test in DEFINITIONS:
-        counter += 1
-        TERMINAL.puts(
-            "\rRUNNING TESTS: {}%".format(int(counter / len(DEFINITIONS) * 100))
-        )
-        TERMINAL.flush()
-        results.append(perform_tests(test[0], test[1]))
-    sleep(1)
-    TERMINAL.clear()
-
-    results.sort(reverse=True)
-    return results
+    TERMINAL.println("RUNNING TESTS ...")
 
 
-def format_pytest_return_code(retcode: str) -> str:
-    return (
-        retcode.strip()
-        .replace("ExitCode.", "")
-        .replace("TESTS_", "")
-        .replace("FAILED", "FAIL")
-        .replace("_ERROR", "")
-    )
-
-
-def format_test_stub_output(test_name: str) -> str:
-    return test_name.strip().replace("test_", "")
-
-
-def perform_tests(file: str, test_stub: str):
-    retcode = pytest.main([f"{HERE}/{file}::{test_stub}"])
-    result = format_pytest_return_code(str(retcode))
-    test_stub = format_test_stub_output(test_stub)
-    return (result, test_stub)
-
-
-def print_test_results(test_results):
-    totals = {}
-    counter = 0
-    for test in test_results:
-        counter += 1
-        result = test[0]
-        test_stub_name = test[1]
-        # track test results
-        if result not in totals.keys():
-            totals[result] = 1
-        else:
-            totals[result] += 1
-        TERMINAL.println(f"{result}: {test_stub_name}")
-
-    fail_count = int(totals.get("FAIL", 0))
-    ok_count = int(totals.get("OK", 0))
-    usage_count = int(totals.get("USAGE", 0))
-    if fail_count > 0:
-        TERMINAL.println(f"{fail_count} OF {counter} FAILED!")
-    elif ok_count == counter:
-        TERMINAL.println(f"ALL {counter} TESTS PASSED")
-    else:
-        TERMINAL.println("WARNING!")
-        TERMINAL.println(f"ONLY {ok_count} OF {counter} OK")
-        TERMINAL.println("PYTEST USAGE ERROR:")
-        TERMINAL.println(f"{usage_count} OF {counter}")
-
-
-def now():
-    """yyyy-MM-ddThhmmss (1980-12-01T221030"""
-    return datetime.utcnow().strftime("%Y-%m-%dT%H%M%S")
-
-
-def run_pytest_main():
+def run_pytest() -> Dict:
+    """run the pytest driver"""
     logging.getLogger(inspect.stack()[0][3])
 
     here = os.path.abspath(os.path.dirname(__file__))
 
+    json_plugin = JSONReport()
     pytest.main(
         [
+            "--json-report-file=none",
             "--self-contained-html",
             f"--html=/var/log/hwtest/report_{now()}.html",
             f"{here}",
-        ]
+        ],
+        plugins=[json_plugin],
     )
+
+    return json_plugin.report
+
+
+def format_pytest_outcome(outcome: str) -> str:
+    """format outcome for brevity"""
+    return outcome.strip().upper().replace("PASSED", "PASS").replace("FAILED", "FAIL")
+
+
+def format_pytest_nodeid(test_name: str) -> str:
+    """format nodeid for brevity"""
+    return test_name.strip().split("::")[1].upper().replace("TEST_", "")
+
+
+def print_pytest_outcomes(tests):
+    """sort outcomes in reverse and print to oled"""
+    reordered = sorted(tests, key=lambda d: d["outcome"], reverse=True)
+
+    for test in reordered:
+        outcome = format_pytest_outcome(test.get("outcome", ""))
+        nodeid_stub = format_pytest_nodeid(test.get("nodeid", ""))
+        TERMINAL.println(f"{outcome}: {nodeid_stub}")
+
+
+def print_pytest_summary(summary):
+    """print pytest summary to oled"""
+    ok = summary.get("passed", 0)
+    fail = summary.get("failed", 0)
+    total = summary.get("total", 0)
+    if fail > 0:
+        TERMINAL.println(f"{fail} OF {total} TESTS FAIL!")
+    if ok == total:
+        TERMINAL.println(f"ALL {total} TESTS PASS")
