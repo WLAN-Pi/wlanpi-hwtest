@@ -1,7 +1,6 @@
 import pytest
 
 from hwtest.tests.helpers import run_command
-import pytest
 
 # fmt: off
 EXPECTED_PCI = [
