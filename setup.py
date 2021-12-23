@@ -19,7 +19,8 @@ except FileNotFoundError:
     readme = about["__description__"]
 
 extras = {
-    "development": [
+    "testing": [
+        "tox",
         "black",
         "isort",
         "mypy",

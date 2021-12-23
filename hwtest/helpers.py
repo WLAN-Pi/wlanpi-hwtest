@@ -71,5 +71,13 @@ def setup_parser() -> argparse.ArgumentParser:
         default=False,
         help="enable debug logging output",
     )
+    parser.add_argument(
+        "-e",
+        "--emulate",
+        dest="emulate",
+        action="store_true",
+        default=False,
+        help="enable keyboard emulation",
+    )
     parser.add_argument("--version", "-V", action="version", version=f"{__version__}")
     return parser
