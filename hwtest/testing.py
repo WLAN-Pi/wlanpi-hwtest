@@ -39,18 +39,25 @@ def are_we_root() -> bool:
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 TERMINAL = None
+EMULATE = False
 RUNNING = True
 DEFINITIONS = []
 
 
-def receiveSignal(signum, _frame):
-    """Handle keyboardinterrupt"""
-    print("Detected SIGINT or Control-C ...")
-    global RUNNING
-    RUNNING = False
+@pytest.fixture(scope="session", autouse=True)
+def term_handler():
+    orig = signal.signal(signal.SIGTERM, signal.getsignal(signal.SIGINT))
+    yield
+    signal.signal(signal.SIGTERM, orig)
 
 
-signal.signal(signal.SIGINT, receiveSignal)
+# def receiveSignal(signum, _frame):
+#     """Handle keyboardinterrupt"""
+#     print("Detected SIGINT or Control-C ...")
+#     global RUNNING
+#     RUNNING = False
+
+# signal.signal(signal.SIGINT, receiveSignal)
 
 
 def now():
@@ -68,6 +75,11 @@ def start(args: argparse.Namespace):
         )
         sys.exit(-1)
 
+    # emulate keyboard pressing (disables detection of real button presses)
+    if args.emulate:
+        global EMULATE
+        EMULATE = True
+
     init_oled()
     init_luma_terminal()
     report = run_pytest()
@@ -75,7 +87,10 @@ def start(args: argparse.Namespace):
     print_pytest_summary(report.get("summary"))
 
     # keep main thread up until stopped by sigint or something else
-    while RUNNING:
+    try:
+        while RUNNING:
+            pass
+    except KeyboardInterrupt:
         pass
 
 
@@ -109,6 +124,7 @@ def run_pytest() -> Dict:
             "--json-report-file=none",
             "--self-contained-html",
             f"--html=/var/log/hwtest/report_{now()}.html",
+            "-s",
             f"{here}",
         ],
         plugins=[json_plugin],
