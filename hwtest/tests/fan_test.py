@@ -1,28 +1,20 @@
-import pytest
-from hwtest.tests.helpers import run_command
+from hwtest.tests.helpers import is_module_present
 
 
-@pytest.fixture
-def capture_vcdbg_output(tmp_path):
-    _dir = tmp_path / "t"
-    _dir.mkdir()
-    f = _dir / "dummy.log"
-    cmd = ['sudo', 'vcdbg', 'log', 'msg', '>', f, '2>&1']
-    run_command(cmd, invoke_shell=True)
-    return(f)
+def test_gpio_module():
+    """
+    Test command:
+        lsmod | grep gpio_fan
 
-    # f.write_text(config_data)
-    # return(f)
+    Results:
+        True - gpio_fan module detected in lsmod
+        False - not detected
+    """
 
-
-def test_hi(capture_vcdbg_output):
-    f = capture_vcdbg_output
-    meh = f.open()
-    # data = f.read()
-    # print(data)
+    assert is_module_present('gpio_fan') is True
 
 
-def test_dtoverlay():
+def test_gpio_config():
     """
     Test command:
         read /boot/config.txt
