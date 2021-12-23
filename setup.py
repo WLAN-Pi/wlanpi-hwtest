@@ -4,6 +4,7 @@ import os
 from codecs import open
 
 from setuptools import setup, find_packages
+from pip.req import parse_requirements
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -19,7 +20,8 @@ except FileNotFoundError:
     readme = about["__description__"]
 
 extras = {
-    "development": [
+    "testing": [
+        "tox",
         "black",
         "isort",
         "mypy",
