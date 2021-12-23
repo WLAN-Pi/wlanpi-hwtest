@@ -1,5 +1,5 @@
 [Unit]
-Description=Front Panel Menu System for the WLAN Pi OLED display
+Description=Platform testing suite for the WLAN Pi Pro
 After=multi-user.target basic.target
 
 [Service]
