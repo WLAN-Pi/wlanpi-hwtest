@@ -100,28 +100,28 @@ def button_press(gpio_pin: int):
 
 
 def down():
-    BUTTONS_PRESSED["BUTTON_DOWN"] = True
     button_press(PINS["down"])
+    BUTTONS_PRESSED["BUTTON_DOWN"] = True
 
 
 def up():
-    BUTTONS_PRESSED["BUTTON_UP"] = True
     button_press(PINS["up"])
+    BUTTONS_PRESSED["BUTTON_UP"] = True
 
 
 def left():
-    BUTTONS_PRESSED["BUTTON_LEFT"] = True
     button_press(PINS["left"])
+    BUTTONS_PRESSED["BUTTON_LEFT"] = True
 
 
 def right():
-    BUTTONS_PRESSED["BUTTON_RIGHT"] = True
     button_press(PINS["right"])
+    BUTTONS_PRESSED["BUTTON_RIGHT"] = True
 
 
 def center():
-    BUTTONS_PRESSED["BUTTON_CENTER"] = True
     button_press(PINS["center"])
+    BUTTONS_PRESSED["BUTTON_CENTER"] = True
 
 
 BUTTON_DOWN.when_pressed = down
@@ -158,33 +158,34 @@ def button_emulation():
             break
 
         if char == "8" or char == "w":
-            BUTTONS_PRESSED["BUTTON_UP"] = True
+            log.info("EMULATE UP PRESS")
             BUTTON_UP.pin.drive_low()
             BUTTON_UP.pin.drive_high()
+            BUTTONS_PRESSED["BUTTON_UP"] = True
 
         if char == "2" or char == "x":
             log.info("EMULATE DOWN PRESS")
-            BUTTONS_PRESSED["BUTTON_DOWN"] = True
             BUTTON_DOWN.pin.drive_low()
             BUTTON_DOWN.pin.drive_high()
+            BUTTONS_PRESSED["BUTTON_DOWN"] = True
 
         if char == "4" or char == "a":
             log.info("BUTTON_LEFT PRESSED")
-            BUTTONS_PRESSED["BUTTON_LEFT"] = True
             BUTTON_LEFT.pin.drive_low()
             BUTTON_LEFT.pin.drive_high()
+            BUTTONS_PRESSED["BUTTON_LEFT"] = True
 
         if char == "6" or char == "d":
             log.info("BUTTON_RIGHT PRESSED")
-            BUTTONS_PRESSED["BUTTON_RIGHT"] = True
             BUTTON_RIGHT.pin.drive_low()
             BUTTON_RIGHT.pin.drive_high()
+            BUTTONS_PRESSED["BUTTON_RIGHT"] = True
 
         if char == "5" or char == "s":
             log.info("BUTTON_CENTER PRESSED")
-            BUTTONS_PRESSED["BUTTON_CENTER"] = True
             BUTTON_CENTER.pin.drive_low()
             BUTTON_CENTER.pin.drive_high()
+            BUTTONS_PRESSED["BUTTON_CENTER"] = True
 
 
 def test_5x_buttons():
