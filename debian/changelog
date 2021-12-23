@@ -1,3 +1,9 @@
+wlanpi-hwtest (1.0.2) unstable; urgency=medium
+
+  * Buttons 
+
+ -- Josh Schmelzle <josh@joshschmelzle.com>  Thu, 23 Dec 2021 01:02:01 -0500
+
 wlanpi-hwtest (1.0.1) unstable; urgency=medium
 
   * Initial release.
