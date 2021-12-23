@@ -80,7 +80,8 @@ def center():
 
 
 # This is required for button emulation before the gpiozero button objects are created
-Device.pin_factory = MockFactory()
+if EMULATE:
+    Device.pin_factory = MockFactory()
 
 BUTTON_DOWN = GPIO_Button(PINS["down"])
 BUTTON_UP = GPIO_Button(PINS["up"])
