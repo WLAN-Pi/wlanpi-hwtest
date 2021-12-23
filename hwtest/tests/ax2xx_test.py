@@ -1,7 +1,7 @@
 from hwtest.tests.helpers import run_command
 
 
-def ax2xx_devices_present_lspci_test():
+def test_2_intel_ax2xx():
     """
     Test command:
         lspci | grep Intel
