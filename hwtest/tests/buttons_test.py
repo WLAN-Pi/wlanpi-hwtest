@@ -14,7 +14,19 @@ from gpiozero import Button as GPIO_Button
 from gpiozero import Device
 from gpiozero.pins.mock import MockFactory
 
-from hwtest.testing import EMULATE, RUNNING, TERMINAL
+from hwtest.testing import EMULATE, RUNNING, TERMINAL, TESTING_IN_PROGRESS
+
+
+@pytest.fixture(scope="session", autouse=True)
+def term_handler():
+    orig = signal.signal(signal.SIGTERM, signal.getsignal(signal.SIGINT))
+    yield
+    signal.signal(signal.SIGTERM, orig)
+
+
+# this must run before gpiozero button objects are created in order for button emulation to work.
+if EMULATE:
+    Device.pin_factory = MockFactory()
 
 BUTTONS = {}
 
@@ -26,16 +38,7 @@ PINS = {
     "center": 6,
 }
 
-
-def button_press(gpio_pin: int):
-    pressed = ""
-    for button, pin in PINS.items():
-        if gpio_pin == pin:
-            pressed = button
-    TERMINAL.println(f" - {pressed.upper() if pressed else gpio_pin} PRESSED")
-
-
-LIST_OF_PRESSED_BUTTONS = {
+BUTTONS_PRESSED = {
     "BUTTON_UP": False,
     "BUTTON_DOWN": False,
     "BUTTON_LEFT": False,
@@ -43,50 +46,88 @@ LIST_OF_PRESSED_BUTTONS = {
     "BUTTON_CENTER": False,
 }
 
-
-def down():
-    log = logging.getLogger(inspect.stack()[0][3])
-    log.info("BUTTON_DOWN PRESSED")
-    LIST_OF_PRESSED_BUTTONS["BUTTON_DOWN"] = True
-    button_press(PINS["down"])
-
-
-def up():
-    log = logging.getLogger(inspect.stack()[0][3])
-    log.info("BUTTON_UP PRESSED")
-    LIST_OF_PRESSED_BUTTONS["BUTTON_UP"] = True
-    button_press(PINS["up"])
-
-
-def left():
-    log = logging.getLogger(inspect.stack()[0][3])
-    log.info("BUTTON_LEFT PRESSED")
-    LIST_OF_PRESSED_BUTTONS["BUTTON_LEFT"] = True
-    button_press(PINS["left"])
-
-
-def right():
-    log = logging.getLogger(inspect.stack()[0][3])
-    log.info("BUTTON_RIGHT PRESSED")
-    LIST_OF_PRESSED_BUTTONS["BUTTON_RIGHT"] = True
-    button_press(PINS["right"])
-
-
-def center():
-    log = logging.getLogger(inspect.stack()[0][3])
-    log.info("BUTTON_CENTER PRESSED")
-    LIST_OF_PRESSED_BUTTONS["BUTTON_CENTER"] = True
-    button_press(PINS["center"])
-
-
-# This is required for button emulation before the gpiozero button objects are created
-Device.pin_factory = MockFactory()
+BUTTONS_PRINTED = {
+    "BUTTON_UP": False,
+    "BUTTON_DOWN": False,
+    "BUTTON_LEFT": False,
+    "BUTTON_RIGHT": False,
+    "BUTTON_CENTER": False,
+}
 
 BUTTON_DOWN = GPIO_Button(PINS["down"])
 BUTTON_UP = GPIO_Button(PINS["up"])
 BUTTON_LEFT = GPIO_Button(PINS["left"])
 BUTTON_RIGHT = GPIO_Button(PINS["right"])
 BUTTON_CENTER = GPIO_Button(PINS["center"])
+
+
+def button_press(gpio_pin: int):
+    log = logging.getLogger(inspect.stack()[0][3])
+
+    pressed = ""
+    for button, pin in PINS.items():
+        if gpio_pin == pin:
+            pressed = button.upper()
+    log.info(f"DETECTED PRESS ON GPIO PIN {gpio_pin}")
+
+    def _println():
+        TERMINAL.println(f"* {pressed} ({gpio_pin}) DETECTED")
+
+    if TESTING_IN_PROGRESS:
+        if pressed:
+            if pressed == "LEFT":
+                if not BUTTONS_PRINTED["BUTTON_LEFT"]:
+                    BUTTONS_PRINTED["BUTTON_LEFT"] = True
+                    _println()
+                    return
+            if pressed == "UP":
+                if not BUTTONS_PRINTED["BUTTON_UP"]:
+                    BUTTONS_PRINTED["BUTTON_UP"] = True
+                    _println()
+                    return
+            if pressed == "DOWN":
+                if not BUTTONS_PRINTED["BUTTON_DOWN"]:
+                    BUTTONS_PRINTED["BUTTON_DOWN"] = True
+                    _println()
+                    return
+            if pressed == "CENTER":
+                if not BUTTONS_PRINTED["BUTTON_CENTER"]:
+                    BUTTONS_PRINTED["BUTTON_CENTER"] = True
+                    _println()
+                    return
+            if pressed == "RIGHT":
+                if not BUTTONS_PRINTED["BUTTON_RIGHT"]:
+                    BUTTONS_PRINTED["BUTTON_RIGHT"] = True
+                    _println()
+                    return
+        else:
+            TERMINAL.println(f"* GPIO PIN {gpio_pin} PRESSED")
+
+
+def down():
+    BUTTONS_PRESSED["BUTTON_DOWN"] = True
+    button_press(PINS["down"])
+
+
+def up():
+    BUTTONS_PRESSED["BUTTON_UP"] = True
+    button_press(PINS["up"])
+
+
+def left():
+    BUTTONS_PRESSED["BUTTON_LEFT"] = True
+    button_press(PINS["left"])
+
+
+def right():
+    BUTTONS_PRESSED["BUTTON_RIGHT"] = True
+    button_press(PINS["right"])
+
+
+def center():
+    BUTTONS_PRESSED["BUTTON_CENTER"] = True
+    button_press(PINS["center"])
+
 
 BUTTON_DOWN.when_pressed = down
 BUTTON_UP.when_pressed = up
@@ -107,73 +148,72 @@ def getch():
     return ch
 
 
-def emulate_buttons():
+def all_expected_buttons_pressed() -> bool:
+    global BUTTONS_PRESSED
+    return all(value == True for value in BUTTONS_PRESSED.values())
+
+
+def button_emulation():
     log = logging.getLogger(inspect.stack()[0][3])
-    global LIST_OF_PRESSED_BUTTONS
-    while not all(value == True for value in LIST_OF_PRESSED_BUTTONS.values()):
+    while not all_expected_buttons_pressed():
         char = getch()
 
         if char == "k" or char == "K":
-            log.info("Stop requested ... Breaking out of emulate buttons ...")
+            log.info("Stop requested ... Breaking out of button emulation ...")
             break
 
         if char == "8" or char == "w":
-            log.info("EMULATE UP PRESS")
-            LIST_OF_PRESSED_BUTTONS["BUTTON_UP"] = True
+            BUTTONS_PRESSED["BUTTON_UP"] = True
             BUTTON_UP.pin.drive_low()
             BUTTON_UP.pin.drive_high()
 
         if char == "2" or char == "x":
             log.info("EMULATE DOWN PRESS")
-            LIST_OF_PRESSED_BUTTONS["BUTTON_DOWN"] = True
+            BUTTONS_PRESSED["BUTTON_DOWN"] = True
             BUTTON_DOWN.pin.drive_low()
             BUTTON_DOWN.pin.drive_high()
 
         if char == "4" or char == "a":
             log.info("BUTTON_LEFT PRESSED")
-            LIST_OF_PRESSED_BUTTONS["BUTTON_LEFT"] = True
+            BUTTONS_PRESSED["BUTTON_LEFT"] = True
             BUTTON_LEFT.pin.drive_low()
             BUTTON_LEFT.pin.drive_high()
 
         if char == "6" or char == "d":
             log.info("BUTTON_RIGHT PRESSED")
-            LIST_OF_PRESSED_BUTTONS["BUTTON_RIGHT"] = True
+            BUTTONS_PRESSED["BUTTON_RIGHT"] = True
             BUTTON_RIGHT.pin.drive_low()
             BUTTON_RIGHT.pin.drive_high()
 
         if char == "5" or char == "s":
             log.info("BUTTON_CENTER PRESSED")
-            LIST_OF_PRESSED_BUTTONS["BUTTON_CENTER"] = True
+            BUTTONS_PRESSED["BUTTON_CENTER"] = True
             BUTTON_CENTER.pin.drive_low()
             BUTTON_CENTER.pin.drive_high()
 
-    log.info("ALL BUTTONS HAVE BEEN PRESSED")
 
-
-@pytest.fixture(scope="session", autouse=True)
-def term_handler():
-    orig = signal.signal(signal.SIGTERM, signal.getsignal(signal.SIGINT))
-    yield
-    signal.signal(signal.SIGTERM, orig)
-
-
-def test_buttons():
+def test_5x_buttons():
     log = logging.getLogger(inspect.stack()[0][3])
+    log.info("test_buttons()")
     TERMINAL.println("PRESS ALL BUTTONS")
-    TERMINAL.println("TO CONTINUE")
+    TERMINAL.println("   TO CONTINUE")
 
     if EMULATE:
         log.info("UP = 'w', DOWN = 'x', LEFT = 'a', RIGHT = 'd', CENTER = 's'")
         log.info("Press 'k' to break out of button tests.")
-        e = threading.Thread(name="button-emulator", target=emulate_buttons)
+        e = threading.Thread(name="button_emulator", target=button_emulation)
         e.start()
-        e.join()
-    else:
-        try:
-            while RUNNING:
-                if all(value == True for value in LIST_OF_PRESSED_BUTTONS.values()):
-                    break
-        except KeyboardInterrupt:
-            pass
+        # e.join()
 
-    assert all(value == True for value in LIST_OF_PRESSED_BUTTONS.values()) == True
+    try:
+        while RUNNING:
+            if all_expected_buttons_pressed():
+                log.info("ALL BUTTONS HAVE BEEN PRESSED")
+                break
+    except KeyboardInterrupt:
+        pass
+
+    global TESTING_IN_PROGRESS
+    TESTING_IN_PROGRESS = False
+
+    assert all_expected_buttons_pressed() == True

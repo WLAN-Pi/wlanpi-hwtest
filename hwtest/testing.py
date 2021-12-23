@@ -23,6 +23,7 @@ from typing import Dict
 
 import pytest
 from luma.core.virtual import terminal
+from PIL import ImageFont
 from pytest_jsonreport.plugin import JSONReport
 
 from . import oled
@@ -40,7 +41,8 @@ def are_we_root() -> bool:
 HERE = os.path.abspath(os.path.dirname(__file__))
 TERMINAL = None
 EMULATE = False
-RUNNING = True
+RUNNING = False
+TESTING_IN_PROGRESS = False
 DEFINITIONS = []
 
 
@@ -49,20 +51,7 @@ def term_handler():
     orig = signal.signal(signal.SIGTERM, signal.getsignal(signal.SIGINT))
     yield
     signal.signal(signal.SIGTERM, orig)
-
-
-# def receiveSignal(signum, _frame):
-#     """Handle keyboardinterrupt"""
-#     print("Detected SIGINT or Control-C ...")
-#     global RUNNING
-#     RUNNING = False
-
-# signal.signal(signal.SIGINT, receiveSignal)
-
-
-def now():
-    """yyyy-MM-ddThhmmss (1980-12-01T221030"""
-    return datetime.utcnow().strftime("%Y-%m-%dT%H%M%S")
+    TERMINAL.clear()
 
 
 def start(args: argparse.Namespace):
@@ -75,6 +64,12 @@ def start(args: argparse.Namespace):
         )
         sys.exit(-1)
 
+    global RUNNING
+    RUNNING = True
+
+    global TESTING_IN_PROGRESS
+    TESTING_IN_PROGRESS = True
+
     # emulate keyboard pressing (disables detection of real button presses)
     if args.emulate:
         global EMULATE
@@ -82,39 +77,56 @@ def start(args: argparse.Namespace):
 
     init_oled()
     init_luma_terminal()
-    report = run_pytest()
-    print_pytest_outcomes(report.get("tests"))
-    print_pytest_summary(report.get("summary"))
-
-    # keep main thread up until stopped by sigint or something else
     try:
+        report = run_pytest()
+        TESTING_IN_PROGRESS = False
+
+        print_pytest_outcomes(report.get("tests"))
+        print_pytest_summary(report.get("summary"))
+
+        # keep main thread up until stopped by sigint or something else
         while RUNNING:
             pass
     except KeyboardInterrupt:
-        pass
+        TERMINAL.clear()
+        RUNNING = False
+        log.info("detected Control-C ... exiting ...")
 
 
 def init_oled():
     """initialize our oled object"""
     log = logging.getLogger(inspect.stack()[0][3])
-    log.debug("oled.init")
+    log.debug("oled.init()")
     oled.init()
+
+
+def make_font(name, size):
+    font_path = str(os.path.join(HERE, "fonts", name))
+    return ImageFont.truetype(font_path, size)
 
 
 def init_luma_terminal():
     """initialize terminal test"""
     log = logging.getLogger(inspect.stack()[0][3])
-    log.debug("init luma terminal")
+    log.debug("init oled terminal")
     device = oled.device
     global TERMINAL
-    TERMINAL = terminal(device)
+
+    font = make_font("DejaVuSansMono.ttf", 10)
+    TERMINAL = terminal(device, font)
     TERMINAL.println(f"WLANPI HWTEST {__version__}")
     TERMINAL.println("RUNNING TESTS ...")
 
 
+def now():
+    """yyyy-MM-ddThhmmss (1980-12-01T221030"""
+    return datetime.utcnow().strftime("%Y-%m-%dT%H%M%S")
+
+
 def run_pytest() -> Dict:
     """run the pytest driver"""
-    logging.getLogger(inspect.stack()[0][3])
+    log = logging.getLogger(inspect.stack()[0][3])
+    log.debug("starting pytest driver")
 
     here = os.path.abspath(os.path.dirname(__file__))
 
@@ -149,8 +161,12 @@ def print_pytest_outcomes(tests):
 
     for test in reordered:
         outcome = format_pytest_outcome(test.get("outcome", ""))
+        if outcome == "PASS":
+            outcome = "✓"
+        if outcome == "FAIL":
+            outcome = "X"
         nodeid_stub = format_pytest_nodeid(test.get("nodeid", ""))
-        TERMINAL.println(f"{outcome}: {nodeid_stub}")
+        TERMINAL.println(f"{outcome}  {nodeid_stub}")
 
 
 def print_pytest_summary(summary):
