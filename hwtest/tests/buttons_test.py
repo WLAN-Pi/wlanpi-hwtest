@@ -15,6 +15,7 @@ from gpiozero import Device
 from gpiozero.pins.mock import MockFactory
 
 from hwtest.testing import EMULATE, RUNNING, TERMINAL, TESTING_IN_PROGRESS
+from hwtest.oled import BUTTONS_PINS
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -30,13 +31,7 @@ if EMULATE:
 
 BUTTONS = {}
 
-PINS = {
-    "up": 22,
-    "down": 5,
-    "left": 17,
-    "right": 27,
-    "center": 6,
-}
+PINS = BUTTONS_PINS
 
 BUTTONS_PRESSED = {
     "BUTTON_UP": False,
