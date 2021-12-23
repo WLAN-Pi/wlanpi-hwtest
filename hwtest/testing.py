@@ -109,6 +109,7 @@ def run_pytest() -> Dict:
             "--json-report-file=none",
             "--self-contained-html",
             f"--html=/var/log/hwtest/report_{now()}.html",
+            "-s",
             f"{here}",
         ],
         plugins=[json_plugin],
