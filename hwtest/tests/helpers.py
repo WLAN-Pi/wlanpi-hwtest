@@ -8,7 +8,7 @@
 wlanpi-hwtest.tests.helpers
 ~~~~~~~~~~~~~~~~~~~~~
 
-provides functions which help provide consistency across tests 
+provides functions which help provide consistency across tests
 """
 
 import subprocess
@@ -30,36 +30,12 @@ def is_module_present(module: str) -> bool:
         return False
 
 
-def run_command_with_shell(
-    cmd: str, suppress_output=False, return_exit_values=False
-) -> str:
+def run_command(cmd: list, suppress_output=False, return_exit_values=False, invoke_shell=False) -> str:
     """Run a single CLI command with subprocess and return stdout or stderr response"""
     cp = subprocess.run(
         cmd,
         encoding="utf-8",
-        shell=True,
-        check=False,
-        capture_output=True,
-    )
-
-    if return_exit_values:
-        return cp.returncode
-
-    if not suppress_output:
-        if cp.stdout:
-            return cp.stdout.strip()
-        if cp.stderr:
-            return cp.stderr.strip()
-
-    return "completed process return code is non-zero with no stdout or stderr"
-
-
-def run_command(cmd: list, suppress_output=False, return_exit_values=False) -> str:
-    """Run a single CLI command with subprocess and return stdout or stderr response"""
-    cp = subprocess.run(
-        cmd,
-        encoding="utf-8",
-        shell=False,
+        shell=invoke_shell,
         check=False,
         capture_output=True,
     )
