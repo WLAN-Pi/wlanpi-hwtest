@@ -1,3 +1,11 @@
+wlanpi-hwtest (1.0.3) unstable; urgency=medium
+
+  * PCI tests from Colin
+  * Button improvements
+  * Use a better font (thanks Adrian for the pointer)
+
+ -- Josh Schmelzle <josh@joshschmelzle.com>  Thu, 23 Dec 2021 14:30:20 -0500
+
 wlanpi-hwtest (1.0.2) unstable; urgency=medium
 
   * Buttons 
