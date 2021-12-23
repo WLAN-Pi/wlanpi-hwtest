@@ -5,12 +5,22 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Module",
+            "name": "hwtest",
             "type": "python",
             "request": "launch",
             "module": "hwtest",
             "sudo": true,
             "args": []
+        },
+        {
+            "name": "hwtest: emulate",
+            "type": "python",
+            "request": "launch",
+            "module": "hwtest",
+            "sudo": true,
+            "args": [
+                "-e",
+            ]
         }
     ]
 }
