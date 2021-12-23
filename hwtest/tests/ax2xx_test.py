@@ -1,4 +1,4 @@
-from hwtest.tests.helpers import run_command
+from hwtest.tests.helpers import run_command_with_shell
 
 
 def test_2_intel_ax2xx():
@@ -10,6 +10,6 @@ def test_2_intel_ax2xx():
         True - (2) network controllers of "Intel Corporation Wi-Fi 6" exist
         False - <2 or >2 network controllers of "Intel Corporation Wi-Fi 6" exist
     """
-    resp = run_command(["lspci", "|", "grep", "Intel"])
+    resp = run_command_with_shell(["lspci", "|", "grep", "Intel"])
 
-    assert resp.count('Intel Corporation Wi-Fi 6') == 2
+    assert resp.count("Intel Corporation Wi-Fi 6") == 2
