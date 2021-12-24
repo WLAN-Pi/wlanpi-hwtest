@@ -1,3 +1,12 @@
+wlanpi-hwtest (1.0.4) unstable; urgency=medium
+
+  * add tests for fan detection
+  * add test for bq27546
+  * add support for 1.44 LCD Display HAT from Waveshare (thanks Adrian)
+  * better font (needs improved still) 
+
+ -- Josh Schmelzle <josh@joshschmelzle.com>  Fri, 24 Dec 2021 12:08:34 -0500
+
 wlanpi-hwtest (1.0.3) unstable; urgency=medium
 
   * PCI tests from Colin
