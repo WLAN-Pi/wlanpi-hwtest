@@ -13,6 +13,7 @@ oled stuff
 
 import inspect
 import logging
+import os
 import sys
 
 import luma.core
@@ -28,9 +29,43 @@ INTERFACE_TYPE = None
 WIDTH = None
 HEIGHT = None
 COLOR_ORDER_BGR = False
+GPIO_DATA_COMMAND = None
+H_OFFSET = None
+V_OFFSET = None
 
-# ssd1351 128 x 128
-DISPLAY_TYPE = "ssd1351"
+# Button mapping (WLANPi Pro)
+BUTTONS_WLANPI_PRO = {
+    "up": 22,
+    "down": 5,
+    "left": 17,
+    "right": 27,
+    "center": 6,
+}
+
+# Button mapping for the Waveshare 1.44 inch LCD Display HAT
+# https://www.waveshare.com/1.44inch-lcd-hat.htm
+BUTTONS_WAVESHARE = {
+    "up": 6,
+    "down": 19,
+    "left": 5,
+    "right": 26,
+    "center": 13,
+}
+
+BUTTONS_PINS = {}
+
+if os.path.exists("/boot/waveshare"):
+    # st7735 128 x 128
+    DISPLAY_TYPE = "st7735"
+    GPIO_DATA_COMMAND = "25"
+    H_OFFSET = "1"
+    V_OFFSET = "2"
+    BUTTONS_PINS = BUTTONS_WAVESHARE
+else:
+    # ssd1351 128 x 128
+    DISPLAY_TYPE = "ssd1351"
+    BUTTONS_PINS = BUTTONS_WLANPI_PRO
+
 INTERFACE_TYPE = "spi"
 SPI_PORT = 0
 SPI_DEVICE = 0
@@ -47,17 +82,6 @@ PAGE_HEIGHT = 64 + HEIGHT_OFFSET  # Pixel size of screen height
 NAV_BAR_TOP = 54 + HEIGHT_OFFSET  # Top pixel number of nav bar
 STATUS_BAR_HEIGHT = 16
 SYSTEM_BAR_HEIGHT = 15
-
-# Button mapping (WLANPi Pro)
-BUTTONS_WLANPI_PRO = {
-    "up": 22,
-    "down": 5,
-    "left": 17,
-    "right": 27,
-    "center": 6,
-}
-
-BUTTONS_PINS = {}
 
 # ignore PIL debug messages
 logging.getLogger("PIL").setLevel(logging.ERROR)
@@ -118,6 +142,18 @@ if WIDTH:
 if HEIGHT:
     actual_args.append("--height")
     actual_args.append(HEIGHT)
+
+if GPIO_DATA_COMMAND:
+    actual_args.append("--gpio-data-command")
+    actual_args.append(GPIO_DATA_COMMAND)
+
+if H_OFFSET:
+    actual_args.append("--h-offset")
+    actual_args.append(H_OFFSET)
+
+if V_OFFSET:
+    actual_args.append("--v-offset")
+    actual_args.append(V_OFFSET)
 
 
 def get_device(actual_args=None):
