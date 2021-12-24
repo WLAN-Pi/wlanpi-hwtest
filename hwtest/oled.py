@@ -155,6 +155,7 @@ if V_OFFSET:
     actual_args.append("--v-offset")
     actual_args.append(V_OFFSET)
 
+
 def get_device(actual_args=None):
     """
     Create device from command-line arguments and return it.

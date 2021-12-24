@@ -10,5 +10,5 @@ def test_vl805_fw():
     Expects: VL805 FW version: 000138a1
     """
     resp = run_command(["vl805"])
-    
+
     assert "000138a1" in resp

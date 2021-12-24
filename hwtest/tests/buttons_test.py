@@ -14,8 +14,8 @@ from gpiozero import Button as GPIO_Button
 from gpiozero import Device
 from gpiozero.pins.mock import MockFactory
 
-from hwtest.testing import EMULATE, RUNNING, TERMINAL, TESTING_IN_PROGRESS
 from hwtest.oled import BUTTONS_PINS
+from hwtest.testing import EMULATE, RUNNING, TERMINAL, TESTING_IN_PROGRESS
 
 
 @pytest.fixture(scope="session", autouse=True)

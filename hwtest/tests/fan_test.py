@@ -11,7 +11,7 @@ def test_gpio_module():
         False - not detected
     """
 
-    assert is_module_present('gpio_fan') is True
+    assert is_module_present("gpio_fan") is True
 
 
 def test_gpio_config():
@@ -24,6 +24,6 @@ def test_gpio_config():
         False - "gpio-fan" not found in config.txt
     """
 
-    with open('/boot/config.txt', 'r') as f:
+    with open("/boot/config.txt", "r") as f:
         config_txt = f.read()
-        assert 'gpio-fan' in config_txt
+        assert "gpio-fan" in config_txt
