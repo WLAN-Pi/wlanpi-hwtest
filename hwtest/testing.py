@@ -176,10 +176,13 @@ def print_pytest_outcomes(tests):
 
     for test in reordered:
         outcome = format_pytest_outcome(test.get("outcome", ""))
+        print(outcome)
         if outcome == "PASS":
             outcome = "\uf058"  # fa check-circle
         if outcome == "FAIL":
             outcome = "\uf00d"  # fa times
+        if outcome == "ERROR":
+            outcome = "\uf071"  # fa exclamation-triangle
         nodeid_stub = format_pytest_nodeid(test.get("nodeid", ""))
         iconized_print(outcome, nodeid_stub)
 

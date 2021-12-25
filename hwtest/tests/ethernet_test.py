@@ -29,12 +29,13 @@ def get_ip_data(intf) -> NetworkInterface:
         interface_data[name] = item
     # Build dataclass for storage and easier test assertion
     dobj = NetworkInterface()
-    dobj.operstate = interface_data[intf]["operstate"]
-    dobj.ifname = interface_data[intf]["ifname"]
-    dobj.mac = interface_data[intf]["address"]
-    dobj.mtu = int(interface_data[intf]["mtu"])
-    dobj.ipv4_addr = interface_data[intf]["addr_info"][0]["local"]
-    dobj.ipv4_prefix = int(interface_data[intf]["addr_info"][0]["prefixlen"])
+    if intf in interface_data.keys():
+        dobj.operstate = interface_data[intf]["operstate"]
+        dobj.ifname = interface_data[intf]["ifname"]
+        dobj.mac = interface_data[intf]["address"]
+        dobj.mtu = int(interface_data[intf]["mtu"])
+        dobj.ipv4_addr = interface_data[intf]["addr_info"][0]["local"]
+        dobj.ipv4_prefix = int(interface_data[intf]["addr_info"][0]["prefixlen"])
     if "usb0" not in intf:
         dobj.duplex = run_command(["cat", f"/sys/class/net/{intf}/duplex"])
         dobj.speed = int(run_command(["cat", f"/sys/class/net/{intf}/speed"]))
