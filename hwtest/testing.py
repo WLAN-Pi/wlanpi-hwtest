@@ -176,7 +176,6 @@ def print_pytest_outcomes(tests):
 
     for test in reordered:
         outcome = format_pytest_outcome(test.get("outcome", ""))
-        print(outcome)
         if outcome == "PASS":
             outcome = "\uf058"  # fa check-circle
         if outcome == "FAIL":
