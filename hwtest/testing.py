@@ -78,10 +78,11 @@ def start(args: argparse.Namespace):
     init_oled()
     init_luma_terminal()
     try:
+
         report = run_pytest()
         TESTING_IN_PROGRESS = False
-
         print_pytest_outcomes(report.get("tests"))
+        TERMINAL.println("-" * TERMINAL.width)
         print_pytest_summary(report.get("summary"))
 
         # keep main thread up until stopped by sigint or something else
@@ -105,6 +106,11 @@ def make_font(name, size):
     return ImageFont.truetype(font_path, size)
 
 
+FIRACODE = make_font("FiraCode-SemiBold.ttf", 10)
+FASOLID = make_font("fa-solid-900.ttf", 15)
+FAREGULAR = make_font("fa-regular-400.ttf", 15)
+
+
 def init_luma_terminal():
     """initialize terminal test"""
     log = logging.getLogger(inspect.stack()[0][3])
@@ -112,10 +118,11 @@ def init_luma_terminal():
     device = oled.device
     global TERMINAL
 
-    font = make_font("DejaVuSansMono.ttf", 10)
-    TERMINAL = terminal(device, font)
+    TERMINAL = terminal(
+        device, FIRACODE, color="white", bgcolor="black", line_height=15
+    )
     TERMINAL.println(f"WLANPI HWTEST {__version__}")
-    TERMINAL.println("RUNNING TESTS ...")
+    TERMINAL.println("Starting tests ...")
 
 
 def now():
@@ -155,6 +162,14 @@ def format_pytest_nodeid(test_name: str) -> str:
     return test_name.strip().split("::")[1].upper().replace("TEST_", "")
 
 
+def iconized_print(icon, message, icon_font=FASOLID):
+    TERMINAL.font = icon_font
+    TERMINAL.puts(f"{icon}")
+    TERMINAL.font = FIRACODE
+    TERMINAL.puts(f" {message}\n")
+    TERMINAL.flush()
+
+
 def print_pytest_outcomes(tests):
     """sort outcomes in reverse and print to oled"""
     reordered = sorted(tests, key=lambda d: d["outcome"], reverse=True)
@@ -162,11 +177,13 @@ def print_pytest_outcomes(tests):
     for test in reordered:
         outcome = format_pytest_outcome(test.get("outcome", ""))
         if outcome == "PASS":
-            outcome = "✓"
+            outcome = "\uf058"  # fa check-circle
         if outcome == "FAIL":
-            outcome = "X"
+            outcome = "\uf00d"  # fa times
+        if outcome == "ERROR":
+            outcome = "\uf071"  # fa exclamation-triangle
         nodeid_stub = format_pytest_nodeid(test.get("nodeid", ""))
-        TERMINAL.println(f"{outcome}  {nodeid_stub}")
+        iconized_print(outcome, nodeid_stub)
 
 
 def print_pytest_summary(summary):
@@ -175,6 +192,6 @@ def print_pytest_summary(summary):
     fail = summary.get("failed", 0)
     total = summary.get("total", 0)
     if fail > 0:
-        TERMINAL.println(f"{fail} OF {total} TESTS FAIL!")
+        TERMINAL.println(f"{fail} OF {total} FAILED!")
     if ok == total:
         TERMINAL.println(f"ALL {total} TESTS PASS")
