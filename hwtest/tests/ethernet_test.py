@@ -52,16 +52,52 @@ def usb0_data():
 
 
 def test_eth0_up(eth0_data):
+    """
+    Test commands:
+        ip address
+        cat /sys/class/net/{intf}/duplex
+        cat /sys/class/net/{intf}/speed
+
+    Results:
+        True - eth0 state is "UP"
+        False - any other output
+    """
     assert eth0_data.operstate == "UP"
 
 
 def test_eth0_speed(eth0_data):
+    """
+    Test commands:
+        ip address
+        cat /sys/class/net/{intf}/duplex
+        cat /sys/class/net/{intf}/speed
+
+    Results:
+        True - eth0 speed is "1000"
+        False - any other output
+    """
     assert eth0_data.speed == 1000
 
 
 def test_usb0_down(usb0_data):
+    """
+    Test command:
+        ip address
+
+    Results:
+        True - usb0 state is "DOWN"
+        False - any other output
+    """
     assert usb0_data.operstate == "DOWN"
 
 
 def test_usb0_ip(usb0_data):
+    """
+    Test command:
+        ip address
+
+    Results:
+        True - IP is "169.254.42.1"
+        False - any other output
+    """
     assert usb0_data.ipv4_addr == "169.254.42.1"
