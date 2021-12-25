@@ -5,7 +5,7 @@
 # License : MIT
 
 """
-wlanpi-hwtest.tests.helpers
+wlanpi-hwtest.tests.shell_utils
 ~~~~~~~~~~~~~~~~~~~~~
 
 provides functions which help provide consistency across tests
