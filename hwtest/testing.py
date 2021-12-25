@@ -190,8 +190,11 @@ def print_pytest_summary(summary):
     """print pytest summary to oled"""
     ok = summary.get("passed", 0)
     fail = summary.get("failed", 0)
+    error = summary.get("error", 0)
     total = summary.get("total", 0)
     if fail > 0:
-        TERMINAL.println(f"{fail} OF {total} FAILED!")
+        TERMINAL.println(f"{fail} OF {total} FAILED!!!")
+    if error > 0:
+        TERMINAL.println(f"{error} TESTS ERRORED!!!")
     if ok == total:
-        TERMINAL.println(f"ALL {total} TESTS PASS")
+        iconized_print("\uf164", f"ALL {total} TESTS PASS")

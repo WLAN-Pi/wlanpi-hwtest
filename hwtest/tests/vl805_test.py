@@ -1,3 +1,5 @@
+import shutil
+
 from hwtest.tests.shell_utils import run_command
 
 
@@ -9,6 +11,8 @@ def test_vl805_fw():
 
     Expects: VL805 FW version: 000138a1
     """
-    resp = run_command(["vl805"])
+    if shutil.which("vl805") is not None:
+        resp = run_command(["vl805"])
 
-    assert "000138a1" in resp
+        assert "000138a1" in resp
+    assert False
