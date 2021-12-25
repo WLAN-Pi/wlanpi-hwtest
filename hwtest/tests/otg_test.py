@@ -1,4 +1,4 @@
-from hwtest.tests.helpers import is_module_present, run_command
+from hwtest.tests.shell_utils import is_module_present, run_command
 
 # Further reading: https://michael.stapelberg.ch/posts/2021-04-27-linux-usb-virtual-serial-cdc-acm/
 

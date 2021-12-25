@@ -1,4 +1,4 @@
-from hwtest.tests.helpers import is_module_present, run_command
+from hwtest.tests.shell_utils import is_module_present, run_command
 
 
 def test_rtc_pcf85063_mod():

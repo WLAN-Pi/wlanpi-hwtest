@@ -1,6 +1,6 @@
 from typing import List
 
-from hwtest.tests.helpers import run_command
+from hwtest.tests.shell_utils import run_command
 
 
 def _expected_lspci_resp():
