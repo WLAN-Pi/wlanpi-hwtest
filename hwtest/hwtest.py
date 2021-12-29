@@ -122,6 +122,7 @@ def run_automated_pytests() -> Dict:
         [
             "--json-report-file=none",
             "--self-contained-html",
+            "--cache-clear",
             f"--html=/var/log/wlanpi-hwtest/report_automated_{now()}.html",
             "-s",
             f"{os.path.join(here, 'automated')}",
@@ -145,6 +146,7 @@ def run_interactive_pytests() -> Dict:
         [
             "--json-report-file=none",
             "--self-contained-html",
+            "--cache-clear",
             f"--html=/var/log/wlanpi-hwtest/report_interactive_{now()}.html",
             "-s",
             f"{os.path.join(here, 'interactive')}",
