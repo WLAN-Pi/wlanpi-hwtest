@@ -5,12 +5,25 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "hwtest",
+            "name": "hwtest --debug",
             "type": "python",
             "request": "launch",
             "module": "hwtest",
             "sudo": true,
-            "args": []
+            "args": [
+                "--debug",
+            ]
+        },
+        {
+            "name": "hwtest --oled",
+            "type": "python",
+            "request": "launch",
+            "module": "hwtest",
+            "sudo": true,
+            "args": [
+                "--debug",
+                "--oled",
+            ]
         },
         {
             "name": "hwtest: emulate",
@@ -19,6 +32,7 @@
             "module": "hwtest",
             "sudo": true,
             "args": [
+                "--debug",
                 "-e",
             ]
         }

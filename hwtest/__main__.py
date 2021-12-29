@@ -15,16 +15,18 @@ import os
 import platform
 import sys
 
+from . import hwtest
+
 
 def main():
     """Set up args and start the testing suites"""
-    from . import helpers, testing
+    from . import helpers
 
     parser = helpers.setup_parser()
     args = parser.parse_args()
     helpers.setup_logger(args)
 
-    testing.start(args)
+    hwtest.start(args)
 
 
 def init():

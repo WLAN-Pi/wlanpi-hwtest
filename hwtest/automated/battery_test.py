@@ -1,4 +1,4 @@
-from hwtest.tests.shell_utils import run_command
+from hwtest.shell_utils import run_command
 
 
 def test_bq27546_exists():
