@@ -27,6 +27,9 @@ import hwtest.cfg as cfg
 from hwtest.helpers import read_config
 from hwtest.oled import init_oled_luma_terminal, print_term_icon_and_message
 
+# prevent pytest from creating cache files
+sys.dont_write_bytecode = True
+
 cfg.RUNNING = True
 
 
