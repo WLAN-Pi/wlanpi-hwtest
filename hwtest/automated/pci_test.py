@@ -1,6 +1,6 @@
 import pytest
 
-from hwtest.tests.shell_utils import run_command
+from hwtest.shell_utils import run_command
 
 # fmt: off
 params = {
@@ -30,3 +30,22 @@ def test_pci(slot, expected):
     print(f"expected output: {expected}")
 
     assert expected in cmd_output
+
+
+def test_4x_PI7C9X2G404():
+    """
+    Test presence of 4x PI7C9X2G404 packet switches in lspci output:
+
+    00:00.0 PCI bridge: Broadcom Inc. and subsidiaries BCM2711 PCIe Bridge (rev 20)
+    01:00.0 PCI bridge: Pericom Semiconductor PI7C9X2G404 EL/SL PCIe2 4-Port/4-Lane Packet Switch (rev 05)
+    02:01.0 PCI bridge: Pericom Semiconductor PI7C9X2G404 EL/SL PCIe2 4-Port/4-Lane Packet Switch (rev 05)
+    02:02.0 PCI bridge: Pericom Semiconductor PI7C9X2G404 EL/SL PCIe2 4-Port/4-Lane Packet Switch (rev 05)
+    02:03.0 PCI bridge: Pericom Semiconductor PI7C9X2G404 EL/SL PCIe2 4-Port/4-Lane Packet Switch (rev 05)
+    03:00.0 USB controller: VIA Technologies, Inc. VL805 USB 3.0 Host Controller (rev 01)
+    04:00.0 Network controller: Intel Corporation Device 2725 (rev 1a)
+    05:00.0 Network controller: Intel Corporation Device 2725 (rev 1a)
+    """
+
+    lspci = run_command(["lspci"]).upper()
+
+    assert lspci.count("PI7C9X2G404") == 4

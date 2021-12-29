@@ -1,3 +1,10 @@
+wlanpi-hwtest (1.0.5) unstable; urgency=medium
+
+  * button tests
+  * separate out tests in automated (auto) and interactive (i/a) suites 
+
+ -- Josh Schmelzle <josh@joshschmelzle.com>  Wed, 29 Dec 2021 14:17:20 -0500
+
 wlanpi-hwtest (1.0.4) unstable; urgency=medium
 
   * add tests for fan detection

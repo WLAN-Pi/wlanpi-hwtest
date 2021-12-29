@@ -1,4 +1,4 @@
-from hwtest.tests.shell_utils import is_module_present, run_command
+from hwtest.shell_utils import is_module_present, run_command
 
 
 def test_spi_mod():

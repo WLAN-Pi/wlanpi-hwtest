@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from hwtest.tests.shell_utils import run_command
+from hwtest.shell_utils import run_command
 
 
 @dataclass

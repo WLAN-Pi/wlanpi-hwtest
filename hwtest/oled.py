@@ -8,7 +8,7 @@
 wlanpi-hwtest.oled
 ~~~~~~~~~~~~~~~~~~
 
-oled stuff
+define and init OLED objects for hwtest
 """
 
 import inspect
@@ -18,6 +18,9 @@ import sys
 
 import luma.core
 from luma.core import cmdline, error
+
+import hwtest.cfg as cfg
+from hwtest.__version__ import __version__
 
 # set possible vars to None
 DISPLAY_TYPE = None
@@ -33,26 +36,6 @@ GPIO_DATA_COMMAND = None
 H_OFFSET = None
 V_OFFSET = None
 
-# Button mapping (WLANPi Pro)
-BUTTONS_WLANPI_PRO = {
-    "up": 22,
-    "down": 5,
-    "left": 17,
-    "right": 27,
-    "center": 6,
-}
-
-# Button mapping for the Waveshare 1.44 inch LCD Display HAT
-# https://www.waveshare.com/1.44inch-lcd-hat.htm
-BUTTONS_WAVESHARE = {
-    "up": 6,
-    "down": 19,
-    "left": 5,
-    "right": 26,
-    "center": 13,
-}
-
-BUTTONS_PINS = {}
 
 if os.path.exists("/boot/waveshare"):
     # st7735 128 x 128
@@ -60,11 +43,9 @@ if os.path.exists("/boot/waveshare"):
     GPIO_DATA_COMMAND = "25"
     H_OFFSET = "1"
     V_OFFSET = "2"
-    BUTTONS_PINS = BUTTONS_WAVESHARE
 else:
     # ssd1351 128 x 128
     DISPLAY_TYPE = "ssd1351"
-    BUTTONS_PINS = BUTTONS_WLANPI_PRO
 
 INTERFACE_TYPE = "spi"
 SPI_PORT = 0
@@ -176,7 +157,7 @@ def get_device(actual_args=None):
     # create device
     try:
         device = cmdline.create_device(args)
-        log.info(display_settings(device, args))
+        log.debug(display_settings(device, args))
         return device
 
     except error.Error as _error:
@@ -187,17 +168,40 @@ def get_device(actual_args=None):
 
 device = get_device(actual_args=actual_args)
 
-# Init function of the OLED
+
 def init():
     device.contrast(128)
 
 
 def clearDisplay():
-    # blank = Image.new("RGBA", device.size, "black")
-    # device.display(blank.convert(device.mode))
     device.clear()
 
 
 def drawImage(image):
     device.display(image.convert(device.mode))
-    # device.display(image)
+
+
+def print_term_icon_and_message(icon, message, icon_font=cfg.FASOLID, animate=False):
+    cfg.TERMINAL.animate = animate
+    cfg.TERMINAL.font = icon_font
+    cfg.TERMINAL.puts(f"{icon}")
+    cfg.TERMINAL.font = cfg.FIRACODE
+    cfg.TERMINAL.puts(f" {message}\n")
+    cfg.TERMINAL.flush()
+    if not animate:
+        cfg.TERMINAL.animate = True
+
+
+def init_oled_luma_terminal():
+    """initialize terminal test"""
+    log = logging.getLogger(inspect.stack()[0][3])
+    log.debug(".")
+
+    from luma.core.virtual import terminal
+
+    init()
+
+    cfg.TERMINAL = terminal(
+        device, cfg.FIRACODE, color="white", bgcolor="black", line_height=15
+    )
+    cfg.TERMINAL.println(f"WLANPI HWTEST {__version__}")
