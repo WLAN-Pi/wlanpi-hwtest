@@ -1,4 +1,4 @@
-wlanpi-hwtest (1.0.5) unstable; urgency=medium
+wlanpi-hwtest (1.0.5-1) unstable; urgency=medium
 
   * button tests
   * separate out tests in automated (auto) and interactive (i/a) suites 
