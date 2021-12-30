@@ -1,7 +1,7 @@
 import shutil
 
-from hwtest.vl805 import VL805_FIRMWARE_REVISION
 from hwtest.shell_utils import run_command
+from hwtest.vl805 import VL805_FIRMWARE_REVISION
 
 
 def test_vl805_fw():
