@@ -31,7 +31,11 @@ def is_module_present(module: str) -> bool:
 
 
 def run_command(
-    cmd: list, suppress_output=False, return_exit_values=False, invoke_shell=False
+    cmd: list,
+    suppress_output=False,
+    return_exit_values=False,
+    invoke_shell=False,
+    strip=True,
 ) -> str:
     """Run a single CLI command with subprocess and return stdout or stderr response"""
     cp = subprocess.run(
@@ -47,8 +51,14 @@ def run_command(
 
     if not suppress_output:
         if cp.stdout:
-            return cp.stdout.strip()
+            if strip:
+                return cp.stdout.strip()
+            else:
+                return cp.stdout
         if cp.stderr:
-            return cp.stderr.strip()
+            if strip:
+                return cp.stderr.strip()
+            else:
+                return cp.stderr
 
     return "completed process return code is non-zero with no stdout or stderr"

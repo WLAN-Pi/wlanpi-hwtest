@@ -1,4 +1,10 @@
-wlanpi-hwtest (1.0.7) UNRELEASED; urgency=medium
+wlanpi-hwtest (1.0.8) unstable; urgency=medium
+
+  * Improve pass/fail response when testing is finished  
+
+ -- Josh Schmelzle <josh@joshschmelzle.com>  Thu, 30 Dec 2021 10:28:39 -0500
+
+wlanpi-hwtest (1.0.7) unstable; urgency=medium
 
   * check and upgrade vl805 on boot 
 

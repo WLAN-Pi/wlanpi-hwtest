@@ -121,6 +121,7 @@ def check_and_upgrade_firmware() -> bool:
 
                 # if upgraded, trigger reboot
                 os.system("sudo reboot")
+                sys.exit(0)
             else:
                 # if not expected, halt and warn user.
                 log.error(

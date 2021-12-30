@@ -21,7 +21,6 @@ from . import hwtest, vl805
 
 def receiveSignal(signum, _frame):
     hwtest.cfg.RUNNING = False
-    hwtest.cfg.TERMINAL.clear()
     sys.exit(signum)
 
 
