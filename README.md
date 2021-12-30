@@ -23,6 +23,18 @@ optional arguments:
   --version, -V  show program's version number and exit
 ```
 
+## Logs
+
+Pytest reports for each testing session are saved to `/var/log/wlanpi-hwtest/`:
+
+Example:
+
+```bash
+$ ls /var/log/wlanpi-hwtest | grep dc
+dca632.fea1a2_report_automated_2021-12-30T175453.html
+dca632.fea1a2_report_interactive_2021-12-30T175453.html
+```
+
 ## Contributors
 
 See [AUTHORS](AUTHORS.md).
