@@ -8,14 +8,25 @@
 wlanpi-hwtest.__main__.py
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Entry point
+Entry point for hwtest
 """
 
 import os
 import platform
+import signal
 import sys
 
 from . import hwtest, vl805
+
+
+def receiveSignal():
+    hwtest.cfg.RUNNING = False
+    hwtest.cfg.TERMINAL.clear()
+    sys.exit(-1)
+
+
+signal.signal(signal.SIGINT, receiveSignal)
+signal.signal(signal.SIGTERM, receiveSignal)
 
 
 def elevated_permissions() -> bool:
