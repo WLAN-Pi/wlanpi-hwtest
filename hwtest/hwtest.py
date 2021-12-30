@@ -30,21 +30,6 @@ from hwtest.oled import init_oled_luma_terminal, print_term_icon_and_message
 cfg.RUNNING = True
 
 
-def elevated_permissions() -> bool:
-    """Do we have root permissions?"""
-    if os.geteuid() == 0:
-        return True
-    else:
-        return False
-
-
-if not elevated_permissions():
-    print(
-        "hwtest requires elevated permissions ... try running with sudo ... exiting ..."
-    )
-    sys.exit(-1)
-
-
 @pytest.fixture(scope="session", autouse=True)
 def term_handler():
     orig = signal.signal(signal.SIGTERM, signal.getsignal(signal.SIGINT))
@@ -54,14 +39,10 @@ def term_handler():
     cfg.TERMINAL.clear()
 
 
-def start(args):
+def start():
     """Call pytest from our code"""
     log = logging.getLogger(inspect.stack()[0][3])
-    log.debug(args)
-
-    cfg.CONFIG = read_config(args)
-    log.debug(cfg.CONFIG)
-
+    
     try:
         oled = cfg.CONFIG.get("GENERAL").get("oled")
         verbose = cfg.CONFIG.get("GENERAL").get("verbose")

@@ -15,7 +15,21 @@ import os
 import platform
 import sys
 
-from . import hwtest
+from . import hwtest, vl805
+
+def elevated_permissions() -> bool:
+    """Do we have root permissions?"""
+    if os.geteuid() == 0:
+        return True
+    else:
+        return False
+
+
+if not elevated_permissions():
+    print(
+        "hwtest requires elevated permissions ... try running with sudo ... exiting ..."
+    )
+    sys.exit(-1)
 
 
 def main():
@@ -25,8 +39,13 @@ def main():
     parser = helpers.setup_parser()
     args = parser.parse_args()
     helpers.setup_logger(args)
+    hwtest.cfg.CONFIG = helpers.read_config(args)
 
-    hwtest.start(args)
+    if hwtest.cfg.CONFIG.get("GENERAL").get("firmware"):
+        if vl805.check_and_upgrade_firmware():
+            hwtest.start()
+    else:
+        hwtest.start()
 
 
 def init():

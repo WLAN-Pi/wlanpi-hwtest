@@ -11,7 +11,6 @@ wlanpi-hwtest.helpers
 provides functions which help setup the app.
 """
 
-# standard library imports
 import argparse
 import configparser
 import inspect
@@ -26,7 +25,6 @@ from typing import Any, Dict
 
 import hwtest.cfg as cfg
 
-# app imports
 from .__version__ import __version__
 
 __tools = ["lspci", "lsusb", "modprobe", "modinfo"]
@@ -109,14 +107,14 @@ def setup_parser() -> argparse.ArgumentParser:
         dest="oled",
         action="store_true",
         default=None,
-        help=argparse.SUPPRESS,
+        help="enable OLED and interactive (I/A) tests",
     )
     parser.add_argument(
         "--firmware",
         dest="firmware",
         action="store_true",
         default=None,
-        help=argparse.SUPPRESS,
+        help="enable VL805 firmware check",
     )
     parser.add_argument(
         "--verbose",
