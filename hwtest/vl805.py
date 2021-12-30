@@ -21,12 +21,16 @@ import hwtest.cfg as cfg
 from hwtest.shell_utils import run_command
 
 def get_vl805_firmware_file() -> str:
+    log = logging.getLogger(inspect.stack()[0][3])
     bin_file = "/opt/wlanpi-hwtest/firmware/stable/vl805_000138a1.bin"
 
     if not os.path.isfile(bin_file):
-        dev_bin_file = os.path.join(cfg.HERE, "../install", bin_file)
+        log.debug("Checking development folder because cannot find %s", bin_file)
+        dev_bin_file = os.path.join(cfg.HERE, "../install", bin_file[1:])
         if os.path.isfile(dev_bin_file):
-            bin_file = dev_bin_file
+            return dev_bin_file
+        else:
+            log.error("Cannot find %s", dev_bin_file)
     return bin_file
 
 
@@ -92,10 +96,10 @@ def check_and_upgrade_firmware() -> bool:
     # get firmware
     resp = get_vl805_response()
 
-    # check firmware
+    # if firmware is not expected we need to upgrade it
     if not expected_vl805_firmware(resp):
     
-        # if not expected, try upgrading to our desired version.
+        # try upgrading to our desired version.
         if upgrade_vl805_firmware():
 
             # verify firmware
