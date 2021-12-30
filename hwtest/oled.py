@@ -194,9 +194,6 @@ def print_term_icon_and_message(icon, message, icon_font=cfg.FASOLID, animate=Fa
 
 def init_oled_luma_terminal():
     """initialize terminal test"""
-    log = logging.getLogger(inspect.stack()[0][3])
-    log.debug(".")
-
     from luma.core.virtual import terminal
 
     init()

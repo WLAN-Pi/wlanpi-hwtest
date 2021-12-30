@@ -49,8 +49,6 @@ def start():
             # init our button code
             import hwtest.buttons as btn
 
-            log.debug(btn)
-
             # init oled
             init_oled_luma_terminal()
             cfg.TERMINAL.println("# START AUTO TESTS")
