@@ -25,7 +25,7 @@ optional arguments:
 
 ## OSS
 
-Thank you to all the creators and maintainers of the following open source software used by `hwtest`:
+Thank you to all the creators and maintainers of the following open source software used by `wlanpi-hwtest`:
 
 * [dh-virtualenv](https://github.com/spotify/dh-virtualenv)
 * [Font Awesome](https://fontawesome.com)
@@ -35,3 +35,4 @@ Thank you to all the creators and maintainers of the following open source softw
 * [Pytest](https://pytest.org)
 * [Python](https://www.python.org)
 * [RPi.GPIO](https://pypi.org/project/RPi.GPIO)
+* [rpi-eeprom](https://github.com/raspberrypi/rpi-eeprom)
