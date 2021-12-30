@@ -2,7 +2,7 @@
 #
 # wlanpi-hwtest : verification tools for the WLAN Pi Pro
 # Copyright : (c) 2021 WLAN Pi Project
-# License : MIT
+# License : BSD-3
 
 """
 wlanpi-hwtest.shell_utils

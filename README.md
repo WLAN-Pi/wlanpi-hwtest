@@ -2,25 +2,30 @@
 
 # wlanpi-hwtest
 
-`hwtest` leverages pytest to drive a suite of tests which determine diagnostic health for WLAN Pi Pro hardware.
+`hwtest` is a tool which is used to update VLI USB controller EEPROMs and run pytest to drive pass/fail testing for the WLAN Pi Pro hardware.
 
-## example usage
+## example CLI usage
+
+Optional arguments may be passed in to override default behaviors set in `/etc/wlanpi-hwtest/config.ini`. 
 
 ```bash
-usage: hwtest [-h] [--debug] [-e] [--version]
+usage: hwtest [-h] [--debug] [-e] [--oled] [--firmware] [--verbose] [--version]
 
-wlanpi-hwtest is a verification tool for the WLAN Pi Pro
+wlanpi-hwtest is an VLI USB Controller EEPROM updater and hardware testing tool for the WLAN Pi Pro.
 
 optional arguments:
   -h, --help     show this help message and exit
   --debug        enable debug logging output
   -e, --emulate  enable keyboard emulation
+  --oled         enable OLED and interactive (I/A) tests
+  --firmware     enable VL805 firmware check
+  --verbose      enable verbose printing of results to oled
   --version, -V  show program's version number and exit
 ```
 
 ## OSS
 
-Thank you to all the creators and maintainers of software used by `hwtest`:
+Thank you to all the creators and maintainers of the following open source software used by `wlanpi-hwtest`:
 
 * [dh-virtualenv](https://github.com/spotify/dh-virtualenv)
 * [Font Awesome](https://fontawesome.com)
@@ -30,3 +35,4 @@ Thank you to all the creators and maintainers of software used by `hwtest`:
 * [Pytest](https://pytest.org)
 * [Python](https://www.python.org)
 * [RPi.GPIO](https://pypi.org/project/RPi.GPIO)
+* [rpi-eeprom](https://github.com/raspberrypi/rpi-eeprom)

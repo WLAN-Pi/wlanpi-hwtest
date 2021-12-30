@@ -2,7 +2,7 @@
 #
 # wlanpi-hwtest : verification tools for the WLAN Pi Pro
 # Copyright : (c) 2021 WLAN Pi Project
-# License : MIT
+# License : BSD-3
 
 """
 wlanpi-hwtest.helpers
@@ -11,7 +11,6 @@ wlanpi-hwtest.helpers
 provides functions which help setup the app.
 """
 
-# standard library imports
 import argparse
 import configparser
 import inspect
@@ -26,7 +25,6 @@ from typing import Any, Dict
 
 import hwtest.cfg as cfg
 
-# app imports
 from .__version__ import __version__
 
 __tools = ["lspci", "lsusb", "modprobe", "modinfo"]
@@ -79,7 +77,7 @@ def setup_parser() -> argparse.ArgumentParser:
     """Set default values and handle arg parser"""
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        description="wlanpi-hwtest is a verification tool for the WLAN Pi Pro",
+        description="wlanpi-hwtest is an VLI USB Controller EEPROM updater and hardware testing tool for the WLAN Pi Pro.",
     )
     parser.add_argument(
         "--config",
@@ -109,14 +107,14 @@ def setup_parser() -> argparse.ArgumentParser:
         dest="oled",
         action="store_true",
         default=None,
-        help=argparse.SUPPRESS,
+        help="enable OLED and interactive (I/A) tests",
     )
     parser.add_argument(
         "--firmware",
         dest="firmware",
         action="store_true",
         default=None,
-        help=argparse.SUPPRESS,
+        help="enable VL805 firmware check",
     )
     parser.add_argument(
         "--verbose",

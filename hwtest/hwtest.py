@@ -2,7 +2,7 @@
 #
 # wlanpi-hwtest : verification tools for the WLAN Pi Pro
 # Copyright : (c) 2021 WLAN Pi Project
-# License : MIT
+# License : BSD-3
 
 """
 wlanpi-hwtest.hwtest
@@ -15,7 +15,6 @@ OK, let's test stuff.
 import inspect
 import logging
 import os
-import signal
 import sys
 from datetime import datetime
 from typing import Dict
@@ -24,7 +23,6 @@ import pytest
 from pytest_jsonreport.plugin import JSONReport
 
 import hwtest.cfg as cfg
-from hwtest.helpers import read_config
 from hwtest.oled import init_oled_luma_terminal, print_term_icon_and_message
 
 # prevent pytest from creating cache files
@@ -33,46 +31,16 @@ sys.dont_write_bytecode = True
 cfg.RUNNING = True
 
 
-def elevated_permissions() -> bool:
-    """Do we have root permissions?"""
-    if os.geteuid() == 0:
-        return True
-    else:
-        return False
-
-
-if not elevated_permissions():
-    print(
-        "hwtest requires elevated permissions ... try running with sudo ... exiting ..."
-    )
-    sys.exit(-1)
-
-
-@pytest.fixture(scope="session", autouse=True)
-def term_handler():
-    orig = signal.signal(signal.SIGTERM, signal.getsignal(signal.SIGINT))
-    yield
-    signal.signal(signal.SIGTERM, orig)
-    cfg.RUNNING = False
-    cfg.TERMINAL.clear()
-
-
-def start(args):
+def start():
     """Call pytest from our code"""
     log = logging.getLogger(inspect.stack()[0][3])
-    log.debug(args)
-
-    cfg.CONFIG = read_config(args)
-    log.debug(cfg.CONFIG)
+    log.debug("hwtest pid is %s", os.getpid())
 
     try:
         oled = cfg.CONFIG.get("GENERAL").get("oled")
         verbose = cfg.CONFIG.get("GENERAL").get("verbose")
         if oled:
-            # init our button code
-            import hwtest.buttons as btn
-
-            log.debug(btn)
+            import hwtest.buttons as btn  # fmt: skip
 
             # init oled
             init_oled_luma_terminal()
