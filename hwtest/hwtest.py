@@ -15,7 +15,6 @@ OK, let's test stuff.
 import inspect
 import logging
 import os
-import signal
 from datetime import datetime
 from typing import Dict
 
@@ -26,15 +25,6 @@ import hwtest.cfg as cfg
 from hwtest.oled import init_oled_luma_terminal, print_term_icon_and_message
 
 cfg.RUNNING = True
-
-
-@pytest.fixture(scope="session", autouse=True)
-def term_handler():
-    orig = signal.signal(signal.SIGTERM, signal.getsignal(signal.SIGINT))
-    yield
-    signal.signal(signal.SIGTERM, orig)
-    cfg.RUNNING = False
-    cfg.TERMINAL.clear()
 
 
 def start():

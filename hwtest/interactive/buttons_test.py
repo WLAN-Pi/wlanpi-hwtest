@@ -3,18 +3,8 @@
 
 import inspect
 import logging
-import signal
-
-import pytest
 
 import hwtest.cfg as cfg
-
-
-@pytest.fixture(scope="session", autouse=True)
-def term_handler():
-    orig = signal.signal(signal.SIGTERM, signal.getsignal(signal.SIGINT))
-    yield
-    signal.signal(signal.SIGTERM, orig)
 
 
 def all_expected_buttons_pressed() -> bool:
