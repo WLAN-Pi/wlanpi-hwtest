@@ -93,7 +93,7 @@ def verify_vl805_firmware() -> bool:
         resp = run_command(["vl805", "-v", f"{VL805_FILE}"])
         retcode = run_command(["vl805", "-v", f"{VL805_FILE}"], return_exit_values=True)
         if retcode == 0:
-            log.info("Verified %s EEPROM version", VL805_FILE.split("/")[-1])
+            log.info("%s EEPROM data verified", VL805_FILE.split("/")[-1])
             return True
         else:
             log.error(resp)
@@ -108,11 +108,8 @@ def check_and_upgrade_firmware() -> bool:
         log.error("VL805 not found on path ... Exiting ...")
         sys.exit(-1)
 
-    # get firmware
-    resp = get_vl805_response()
-
     # if firmware is not expected we need to upgrade it
-    if not expected_vl805_firmware(resp):
+    if not verify_vl805_firmware():
 
         log.info("Upgrading VL805 EEPROM")
         # try upgrading to our desired version.
@@ -138,5 +135,5 @@ def check_and_upgrade_firmware() -> bool:
             )
             sys.exit(-1)
 
-    log.debug("VL805 is using expected firmware revision %s", VL805_FIRMWARE_REVISION)
+    log.debug("VL805 is using expected firmware revision (%s)", VL805_FIRMWARE_REVISION)
     return True
