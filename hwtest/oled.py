@@ -31,7 +31,6 @@ SPI_DEVICE = None
 INTERFACE_TYPE = None
 WIDTH = None
 HEIGHT = None
-COLOR_ORDER_BGR = False
 GPIO_DATA_COMMAND = None
 H_OFFSET = None
 V_OFFSET = None
@@ -52,17 +51,7 @@ SPI_PORT = 0
 SPI_DEVICE = 0
 WIDTH = "128"
 HEIGHT = "128"
-COLOR_ORDER_BGR = True
 
-HEIGHT_OFFSET = 64
-DISPLAY_MODE = "RGB"
-
-PAGE_SLEEP = 300  # Time in secs before sleep
-PAGE_WIDTH = 128  # Pixel size of screen width
-PAGE_HEIGHT = 64 + HEIGHT_OFFSET  # Pixel size of screen height
-NAV_BAR_TOP = 54 + HEIGHT_OFFSET  # Top pixel number of nav bar
-STATUS_BAR_HEIGHT = 16
-SYSTEM_BAR_HEIGHT = 15
 
 # ignore PIL debug messages
 logging.getLogger("PIL").setLevel(logging.ERROR)
