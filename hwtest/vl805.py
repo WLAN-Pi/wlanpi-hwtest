@@ -56,7 +56,7 @@ def upgrade_vl805_firmware() -> bool:
     Example:
         vl805 -w vl805_000138a1.bin
     """
-    if os.file.exists(VL805_FILE):
+    if os.path.isfile(VL805_FILE):
         retcode = run_command(["vl805", "-w", f"{VL805_FILE}"], return_exit_values=True)
         if retcode == 0:
             return True
@@ -72,7 +72,7 @@ def verify_vl805_firmware() -> bool:
     """
     log = logging.getLogger(inspect.stack()[0][3])
     
-    if os.file.exists(VL805_FILE):
+    if os.path.isfile(VL805_FILE):
         resp = run_command(["vl805", "-v", f"{VL805_FILE}"])
         retcode = run_command(["vl805", "-v", f"{VL805_FILE}"], return_exit_values=True)
         if retcode == 0:
