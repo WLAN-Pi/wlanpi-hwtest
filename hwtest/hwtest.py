@@ -16,7 +16,6 @@ import inspect
 import logging
 import os
 import sys
-from datetime import datetime
 from typing import Dict
 
 import pytest
@@ -89,11 +88,6 @@ def start():
         log.info("detected Control-C ... exiting ...")
 
 
-def now():
-    """yyyy-MM-ddThhmmss (1980-12-01T221030"""
-    return datetime.utcnow().strftime("%Y-%m-%dT%H%M%S")
-
-
 def run_automated_pytests() -> Dict:
     """run the automated tests"""
     log = logging.getLogger(inspect.stack()[0][3])
@@ -107,7 +101,7 @@ def run_automated_pytests() -> Dict:
             "--json-report-file=none",
             "--self-contained-html",
             "--cache-clear",
-            f"--html=/var/log/wlanpi-hwtest/report_automated_{now()}.html",
+            f"--html=/var/log/wlanpi-hwtest/{cfg.ETH0_MAC}_report_automated_{cfg.START_TIME}.html",
             "-s",
             f"{os.path.join(here, 'automated')}",
             # f"{os.path.join(here, 'automated', 'spi_test.py')}",
@@ -131,7 +125,7 @@ def run_interactive_pytests() -> Dict:
             "--json-report-file=none",
             "--self-contained-html",
             "--cache-clear",
-            f"--html=/var/log/wlanpi-hwtest/report_interactive_{now()}.html",
+            f"--html=/var/log/wlanpi-hwtest/{cfg.ETH0_MAC}_report_interactive_{cfg.START_TIME}.html",
             "-s",
             f"{os.path.join(here, 'interactive')}",
         ],
