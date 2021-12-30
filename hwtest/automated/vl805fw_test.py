@@ -14,5 +14,4 @@ def test_vl805_fw():
     if shutil.which("vl805") is not None:
         resp = run_command(["vl805"])
 
-        assert "000138a1" in resp
-    assert False
+    assert "000138a1" in resp
