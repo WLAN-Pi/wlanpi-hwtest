@@ -77,7 +77,7 @@ def setup_parser() -> argparse.ArgumentParser:
     """Set default values and handle arg parser"""
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        description="wlanpi-hwtest is an VLI USB Controller EEPROM updater and hardware testing tool for the WLAN Pi Pro.",
+        description="hwtest is a VLI USB Controller EEPROM updater and hardware testing tool for the WLAN Pi Pro.",
     )
     parser.add_argument(
         "--config",

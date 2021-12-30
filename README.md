@@ -2,16 +2,16 @@
 
 # wlanpi-hwtest
 
-`hwtest` is a tool which is used to update VLI USB controller EEPROMs and run pytest to drive pass/fail testing for the WLAN Pi Pro hardware.
+`hwtest` is a tool for the WLAN Pi Pro used to update VLI USB controller EEPROMs and run pytest to drive pass/fail testing.
 
-## example CLI usage
+## Example CLI usage
 
 Optional arguments may be passed in to override default behaviors set in `/etc/wlanpi-hwtest/config.ini`. 
 
 ```bash
 usage: hwtest [-h] [--debug] [-e] [--oled] [--firmware] [--verbose] [--version]
 
-wlanpi-hwtest is an VLI USB Controller EEPROM updater and hardware testing tool for the WLAN Pi Pro.
+hwtest is a VLI USB Controller EEPROM updater and hardware testing tool for the WLAN Pi Pro.
 
 optional arguments:
   -h, --help     show this help message and exit
@@ -23,9 +23,17 @@ optional arguments:
   --version, -V  show program's version number and exit
 ```
 
+## Contributors
+
+See [AUTHORS](AUTHORS.md).
+
+## Code of Conduct
+
+See [CoC](CODE_OF_CONDUCT.md).
+
 ## OSS
 
-Thank you to all the creators and maintainers of the following open source software used by `wlanpi-hwtest`:
+Thank you to all the creators and maintainers of the following open source software used by `hwtest`:
 
 * [dh-virtualenv](https://github.com/spotify/dh-virtualenv)
 * [Font Awesome](https://fontawesome.com)
