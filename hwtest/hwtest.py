@@ -40,6 +40,7 @@ def term_handler():
 def start():
     """Call pytest from our code"""
     log = logging.getLogger(inspect.stack()[0][3])
+    log.debug("hwtest pid is %s", os.getpid)
 
     try:
         oled = cfg.CONFIG.get("GENERAL").get("oled")
