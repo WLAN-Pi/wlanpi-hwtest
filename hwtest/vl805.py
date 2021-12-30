@@ -57,11 +57,11 @@ def expected_vl805_firmware(vl805_resp) -> bool:
     log = logging.getLogger(inspect.stack()[0][3])
     if VL805_FIRMWARE_REVISION in vl805_resp:
         log.info(
-            "Firmware revision %s found in VL805 response", VL805_FIRMWARE_REVISION
+            "firmware revision is %s", VL805_FIRMWARE_REVISION
         )
         return True
     log.warning(
-        "Firmware revision %s not found in VL805 response", VL805_FIRMWARE_REVISION
+        "firmware revision %s not found in VL805 response", VL805_FIRMWARE_REVISION
     )
     return False
 
