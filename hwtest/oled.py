@@ -171,14 +171,15 @@ def drawImage(image):
 
 
 def print_term_icon_and_message(icon, message, icon_font=cfg.FASOLID, animate=False):
-    cfg.TERMINAL.animate = animate
-    cfg.TERMINAL.font = icon_font
-    cfg.TERMINAL.puts(f"{icon}")
-    cfg.TERMINAL.font = cfg.FIRACODE
-    cfg.TERMINAL.puts(f" {message}\n")
-    cfg.TERMINAL.flush()
-    if not animate:
-        cfg.TERMINAL.animate = True
+    if cfg.CONFIG.get("GENERAL").get("oled"):
+        cfg.TERMINAL.animate = animate
+        cfg.TERMINAL.font = icon_font
+        cfg.TERMINAL.puts(f"{icon}")
+        cfg.TERMINAL.font = cfg.FIRACODE
+        cfg.TERMINAL.puts(f" {message}\n")
+        cfg.TERMINAL.flush()
+        if not animate:
+            cfg.TERMINAL.animate = True
 
 
 def init_oled_luma_terminal():
