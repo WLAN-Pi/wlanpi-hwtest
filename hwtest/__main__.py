@@ -19,10 +19,10 @@ import sys
 from . import hwtest, vl805
 
 
-def receiveSignal():
+def receiveSignal(signum, _frame):
     hwtest.cfg.RUNNING = False
     hwtest.cfg.TERMINAL.clear()
-    sys.exit(-1)
+    sys.exit(signum)
 
 
 signal.signal(signal.SIGINT, receiveSignal)
