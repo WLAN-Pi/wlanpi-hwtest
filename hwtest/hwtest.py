@@ -46,8 +46,7 @@ def start():
         oled = cfg.CONFIG.get("GENERAL").get("oled")
         verbose = cfg.CONFIG.get("GENERAL").get("verbose")
         if oled:
-            # init our button code
-            import hwtest.buttons as btn
+            import hwtest.buttons as btn  # fmt: skip
 
             # init oled
             init_oled_luma_terminal()
