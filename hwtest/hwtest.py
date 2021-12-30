@@ -16,7 +16,6 @@ import inspect
 import logging
 import os
 import signal
-import sys
 from datetime import datetime
 from typing import Dict
 
@@ -24,7 +23,6 @@ import pytest
 from pytest_jsonreport.plugin import JSONReport
 
 import hwtest.cfg as cfg
-from hwtest.helpers import read_config
 from hwtest.oled import init_oled_luma_terminal, print_term_icon_and_message
 
 cfg.RUNNING = True
@@ -42,7 +40,7 @@ def term_handler():
 def start():
     """Call pytest from our code"""
     log = logging.getLogger(inspect.stack()[0][3])
-    
+
     try:
         oled = cfg.CONFIG.get("GENERAL").get("oled")
         verbose = cfg.CONFIG.get("GENERAL").get("verbose")

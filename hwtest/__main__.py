@@ -17,6 +17,7 @@ import sys
 
 from . import hwtest, vl805
 
+
 def elevated_permissions() -> bool:
     """Do we have root permissions?"""
     if os.geteuid() == 0:
