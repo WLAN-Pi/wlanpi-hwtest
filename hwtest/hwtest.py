@@ -24,6 +24,9 @@ from pytest_jsonreport.plugin import JSONReport
 import hwtest.cfg as cfg
 from hwtest.oled import init_oled_luma_terminal, print_term_icon_and_message
 
+# prevent pytest from creating cache files
+sys.dont_write_bytecode = True
+
 cfg.RUNNING = True
 
 
@@ -86,6 +89,7 @@ def run_automated_pytests() -> Dict:
         [
             "--json-report-file=none",
             "--self-contained-html",
+            "--cache-clear",
             f"--html=/var/log/wlanpi-hwtest/report_automated_{now()}.html",
             "-s",
             f"{os.path.join(here, 'automated')}",
@@ -109,6 +113,7 @@ def run_interactive_pytests() -> Dict:
         [
             "--json-report-file=none",
             "--self-contained-html",
+            "--cache-clear",
             f"--html=/var/log/wlanpi-hwtest/report_interactive_{now()}.html",
             "-s",
             f"{os.path.join(here, 'interactive')}",
