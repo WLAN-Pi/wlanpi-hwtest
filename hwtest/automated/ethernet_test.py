@@ -47,11 +47,6 @@ def eth0_data():
     return get_ip_data("eth0")
 
 
-@pytest.fixture()
-def usb0_data():
-    return get_ip_data("usb0")
-
-
 def test_eth0_up(eth0_data):
     """
     Test commands:
@@ -78,27 +73,3 @@ def test_eth0_speed(eth0_data):
         False - any other output
     """
     assert eth0_data.speed == 1000
-
-
-def test_usb0_down(usb0_data):
-    """
-    Test command:
-        ip address
-
-    Results:
-        True - usb0 state is "DOWN"
-        False - any other output
-    """
-    assert usb0_data.operstate == "DOWN"
-
-
-def test_usb0_ip(usb0_data):
-    """
-    Test command:
-        ip address
-
-    Results:
-        True - IP is "169.254.42.1"
-        False - any other output
-    """
-    assert usb0_data.ipv4_addr == "169.254.42.1"
