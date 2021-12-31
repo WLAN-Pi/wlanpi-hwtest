@@ -1,3 +1,10 @@
+wlanpi-hwtest (1.0.10) unstable; urgency=medium
+
+  * fix up PCI tests
+  * remove USB0 tests 
+
+ -- Josh Schmelzle <josh@joshschmelzle.com>  Fri, 31 Dec 2021 10:23:57 -0500
+
 wlanpi-hwtest (1.0.9) unstable; urgency=medium
 
   * add eth0 identifier to report log filenames found in
