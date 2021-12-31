@@ -4,11 +4,11 @@ from hwtest.shell_utils import run_command
 
 # fmt: off
 params = {
-    'Slot 0': ('00:00.0', '14e4:2711'),
-    'Slot 1': ('01:00.0', '12d8:2404'),
-    'Slot 3': ('03:00.0', '1106:3483'),
-    'Slot 4': ('04:00.0', '8086:2725'),
-    'Slot 5': ('05:00.0', '8086:2725')
+    'Slot 0': ('00:00.0', '[0604]:'),
+    'Slot 1': ('01:00.0', '[0604]:'),
+    'Slot 3': ('03:00.0', '[0c03]:'),
+    'Slot 4': ('04:00.0', '[0280]:'),
+    'Slot 5': ('05:00.0', '[0280]:')
 }
 # fmt: on
 
@@ -25,7 +25,7 @@ def test_pci(slot, expected):
         True - PCI slot output matches expected value from tuple
         False - PCI slot output does not expected value from tuple
     """
-    cmd_output = run_command([f"lspci -s {slot} -n"], invoke_shell=True)
+    cmd_output = run_command([f"lspci -s {slot} -nn"], invoke_shell=True)
     print(f"cmd output: {cmd_output}")
     print(f"expected output: {expected}")
 
