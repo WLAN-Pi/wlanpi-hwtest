@@ -26,8 +26,18 @@ from gpiozero.pins.mock import MockFactory
 import hwtest.cfg as cfg
 from hwtest.oled import print_term_icon_and_message
 
-# Button mapping for the WLAN Pi Pro v1
-BUTTONS_WLANPI_PRO_V1 = {
+
+# Button mapping for the WLAN Pi Pro v1 Rev1
+BUTTONS_WLANPI_PRO_V1_REV1 = {
+    "up": 22,
+    "down": 15,
+    "left": 17,
+    "right": 27,
+    "center": 14,
+}
+
+# Button mapping for the WLAN Pi Pro v1 Rev2
+BUTTONS_WLANPI_PRO_V1_REV2 = {
     "up": 22,
     "down": 5,
     "left": 17,
@@ -50,7 +60,7 @@ PINS = {}
 if os.path.exists("/boot/waveshare"):
     PINS = BUTTONS_WAVESHARE
 else:
-    PINS = BUTTONS_WLANPI_PRO_V1
+    PINS = BUTTONS_WLANPI_PRO_V1_REV2
 
 
 def getch():
