@@ -46,37 +46,52 @@ def start():
             init_oled_luma_terminal()
             cfg.TERMINAL.println("# START AUTO TESTS")
 
+        # run automated tests and get report
         automated_report = run_automated_pytests()
 
+        # if we're running in oled mode, let's do the interactive tests with the buttons...
         if oled:
             print_term_pytest_report(automated_report, verbose=verbose)
             cfg.TERMINAL.println("# DONE AUTO TESTS")
 
             cfg.TERMINAL.println("# START I/A TESTS")
+            
+            # run interactive tests and get report
             interactive_report = run_interactive_pytests()
             print_term_pytest_report(interactive_report, verbose=verbose)
             cfg.TERMINAL.println("# DONE I/A TESTS")
             cfg.TERMINAL.println("------SUMMARY------")
 
-        auto_pass = term_pytest_pass_fail_summary(
+        # get automated tests outcome
+        did_auto_tests_pass = term_pytest_pass_fail_summary(
             automated_report.get("summary"), "AUTO"
         )
-        ia_pass = term_pytest_pass_fail_summary(
-            interactive_report.get("summary"), "I/A"
-        )
+        
+        # if running in oled mode
+        if oled:
+            # get interactive tests outcome
+            did_ia_tests_pass = term_pytest_pass_fail_summary(
+                interactive_report.get("summary"), "I/A"
+            )
 
-        if auto_pass and ia_pass:
-            resp = run_command(["figlet", "PASS"], strip=False)
-            log.info("\n" + resp)
-            if oled:
+            # if both our automated and interactive tests pass
+            if did_auto_tests_pass and did_ia_tests_pass:
+                resp = run_command(["figlet", "PASS"], strip=False)
+                log.info("\n" + resp)
                 cfg.TERMINAL.println("------RESULTS------")
                 cfg.TERMINAL.println("PASS")
-        else:
-            resp = run_command(["figlet", "FAIL"], strip=False)
-            log.error("\n" + resp)
-            if oled:
+            else:
+                resp = run_command(["figlet", "FAIL"], strip=False)
+                log.error("\n" + resp)
                 cfg.TERMINAL.println("------RESULTS------")
                 cfg.TERMINAL.println("FAIL")
+        else:
+            if did_auto_tests_pass:
+                resp = run_command(["figlet", "PASS"], strip=False)
+                log.info("\n" + resp)
+            else:
+                resp = run_command(["figlet", "FAIL"], strip=False)
+                log.error("\n" + resp)
 
         cfg.BUTTON_TEST_IN_PROGRESS = False
 
