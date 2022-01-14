@@ -59,17 +59,3 @@ def test_eth0_up(eth0_data):
         False - any other output
     """
     assert eth0_data.operstate == "UP"
-
-
-def test_eth0_speed(eth0_data):
-    """
-    Test commands:
-        ip address
-        cat /sys/class/net/{intf}/duplex
-        cat /sys/class/net/{intf}/speed
-
-    Results:
-        True - eth0 speed is "1000"
-        False - any other output
-    """
-    assert eth0_data.speed == 1000
