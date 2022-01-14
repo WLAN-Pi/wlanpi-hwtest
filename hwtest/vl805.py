@@ -20,6 +20,12 @@ import sys
 import hwtest.cfg as cfg
 from hwtest.shell_utils import run_command
 
+# On first boot, we need to do a rescan for pci before the vl805 can be detected
+# must have root access to run this:
+# echo 1 > /sys/bus/pci/rescan
+retcode = run_command(["echo 1 > /sys/bus/pci/rescan"], invoke_shell=True, return_exit_values=True)
+log = logging.getLogger("vl805")
+log.debug("return code for 'echo 1 > /sys/bus/pci/rescan' is %s", retcode)
 
 def get_vl805_firmware_file() -> str:
     log = logging.getLogger(inspect.stack()[0][3])
