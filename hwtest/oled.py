@@ -154,11 +154,10 @@ def get_device(actual_args=None):
         log.exception("Luma parser error ... exiting ...", exc_info=True)
         sys.exit(-1)
 
-
-device = get_device(actual_args=actual_args)
-
+device = None
 
 def init():
+    device = get_device(actual_args=actual_args)
     device.contrast(128)
 
 
