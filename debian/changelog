@@ -1,3 +1,12 @@
+wlanpi-hwtest (1.0.11) unstable; urgency=high
+
+  * rescan pci before doing vl805
+  * remove speed check from ethernet test
+  * remove hwclock -r test
+  * check if /dev/rtc0 exists
+ 
+ -- Josh Schmelzle <josh@joshschmelzle.com>  Fri, 14 Jan 2022 00:42:05 -0500
+
 wlanpi-hwtest (1.0.10) unstable; urgency=medium
 
   * fix up PCI tests
