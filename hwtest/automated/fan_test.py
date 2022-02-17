@@ -4,7 +4,39 @@
 # Copyright : (c) 2022 Josh Schmelzle
 # License : BSD-3-Clause
 
+import time
+
 from hwtest.shell_utils import is_module_present, run_command
+
+
+def test_turn_on_fan():
+    """
+    Turn fan on:
+
+        raspi-gpio set 26 op pd dh
+    """
+
+    ret_code = run_command(
+        ["raspi-gpio", "set", "26", "op", "pd", "dh"], return_exit_values=True
+    )
+
+    time.sleep(5)
+
+    assert ret_code == 0
+
+
+def test_turn_off_fan():
+    """
+    Turn fan on:
+
+        raspi-gpio set 26 op pd dl
+    """
+
+    ret_code = run_command(
+        ["raspi-gpio", "set", "26", "op", "pd", "dl"], return_exit_values=True
+    )
+
+    assert ret_code == 0
 
 
 def test_gpio_fan_mod():
