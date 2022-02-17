@@ -35,6 +35,7 @@ Depends: ${misc:Depends},
          figlet,
          lm-sensors,
          raspi-config,
+         raspi-gpio,
          util-linux
 Description: Platform testing tools
  wlanpi-hwtest provides a suite of tests to verify functionality on the WLAN Pi Pro hardware.
