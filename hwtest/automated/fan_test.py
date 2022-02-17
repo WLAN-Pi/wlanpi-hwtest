@@ -32,7 +32,8 @@ def test_gpio_fan_conf():
 
     with open("/boot/config.txt", "r") as f:
         config_txt = f.read()
-        assert "gpio-fan" in config_txt
+        slice_comment = config_txt.split("#")[0]
+        assert "gpio-fan" in slice_comment
 
 
 def test_fan_detected():
