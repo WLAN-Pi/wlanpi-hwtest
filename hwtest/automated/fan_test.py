@@ -31,9 +31,19 @@ def test_gpio_fan_conf():
     """
 
     with open("/boot/config.txt", "r") as f:
-        config_txt = f.read()
-        slice_comment = config_txt.split("#")[0]
-        assert "gpio-fan" in slice_comment
+        config_lines = f.readlines()
+
+    results = [r for r in config_lines if "gpio-fan" in r]
+
+    enabled = False
+
+    for r in results:
+        slice_comment = r.split("#")[0]
+        if "gpio-fan" in slice_comment:
+            enabled = True
+            return
+
+    assert enabled
 
 
 def test_fan_detected():
