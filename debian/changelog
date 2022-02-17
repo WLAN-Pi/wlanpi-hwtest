@@ -1,3 +1,17 @@
+wlanpi-hwtest (1.0.12) unstable; urgency=medium
+
+  * rpi-eeprom-config: check for presence of POWER_OFF_ON_HALT=1
+  * rpi-eeprom-update: check for 0 return code
+  * depends: add raspi-gpio
+  * fan_test: turn fan on for 5 seconds and then turn off
+  * oled: fix bug preventing OLED from starting
+  * oss: update SPDX identifiers from BSD-3 to BSD-3-Clause
+  * default behavior change: oled is now not engaged by default
+  * default behavior change: autostart is now not started by default
+  * bluetooth_test: ignore up/down status
+
+ --  Josh Schmelzle <josh@joshschmelzle.com>  Thu, 17 Feb 2022 01:26:13 -0500
+
 wlanpi-hwtest (1.0.11) unstable; urgency=high
 
   * rescan pci before doing vl805
