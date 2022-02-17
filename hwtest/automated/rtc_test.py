@@ -36,6 +36,7 @@ def test_rtc0_exists():
 
     assert exit_value == 0
 
+
 ################
 # INVALID TEST #
 ################

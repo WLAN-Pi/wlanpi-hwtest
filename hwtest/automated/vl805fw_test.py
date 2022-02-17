@@ -19,7 +19,7 @@ def test_vl805_fw():
     Expects: VL805 FW version: 000138a1
     """
     resp = ""
-    
+
     if shutil.which("vl805") is not None:
         resp = run_command(["vl805"])
 

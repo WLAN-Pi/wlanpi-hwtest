@@ -26,7 +26,6 @@ from gpiozero.pins.mock import MockFactory
 import hwtest.cfg as cfg
 from hwtest.oled import print_term_icon_and_message
 
-
 # Button mapping for the WLAN Pi Pro v1 Rev1
 BUTTONS_WLANPI_PRO_V1_REV1 = {
     "up": 22,

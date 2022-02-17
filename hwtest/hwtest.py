@@ -55,7 +55,7 @@ def start():
             cfg.TERMINAL.println("# DONE AUTO TESTS")
 
             cfg.TERMINAL.println("# START I/A TESTS")
-            
+
             # run interactive tests and get report
             interactive_report = run_interactive_pytests()
             print_term_pytest_report(interactive_report, verbose=verbose)
@@ -66,7 +66,7 @@ def start():
         did_auto_tests_pass = term_pytest_pass_fail_summary(
             automated_report.get("summary"), "AUTO"
         )
-        
+
         # if running in oled mode
         if oled:
             # get interactive tests outcome
