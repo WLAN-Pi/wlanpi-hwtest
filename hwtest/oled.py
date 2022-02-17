@@ -154,19 +154,11 @@ def get_device(actual_args=None):
         log.exception("Luma parser error ... exiting ...", exc_info=True)
         sys.exit(-1)
 
-device = None
 
 def init():
     device = get_device(actual_args=actual_args)
     device.contrast(128)
-
-
-def clearDisplay():
-    device.clear()
-
-
-def drawImage(image):
-    device.display(image.convert(device.mode))
+    return device
 
 
 def print_term_icon_and_message(icon, message, icon_font=cfg.FASOLID, animate=False):
@@ -185,7 +177,7 @@ def init_oled_luma_terminal():
     """initialize terminal test"""
     from luma.core.virtual import terminal
 
-    init()
+    device = init()
 
     cfg.TERMINAL = terminal(
         device, cfg.FIRACODE, color="white", bgcolor="black", line_height=15
