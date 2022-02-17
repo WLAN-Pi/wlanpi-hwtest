@@ -61,9 +61,10 @@ setup(
         "pytest-html==3.1.1",
         "pytest-json-report==1.4.1",
         "luma.oled==3.8.1",
-        "rpi.gpio==0.7.1a4",
+        "luma.lcd==2.9.0",
+        "rpi.gpio==0.7.1",
         "gpiozero==1.6.2",
-        "Pillow==9.0.0", 
+        "Pillow==9.0.1", 
     ],
     entry_points={"console_scripts": ["hwtest=hwtest.__main__:main"]},
 )
