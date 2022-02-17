@@ -95,6 +95,8 @@ def start():
 
         cfg.BUTTON_TEST_IN_PROGRESS = False
 
+        log.info("press CTRL-C to exit ...")
+
         # keep main thread up until stopped by sigint or something else
         while cfg.RUNNING:
             pass
