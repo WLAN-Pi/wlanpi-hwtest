@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 #
 # wlanpi-hwtest : verification tools for the WLAN Pi Pro
-# Copyright : (c) 2021 WLAN Pi Project
-# License : BSD-3
+# Copyright : (c) 2022 Josh Schmelzle
+# License : BSD-3-Clause
 
 """
 wlanpi-hwtest.shell_utils

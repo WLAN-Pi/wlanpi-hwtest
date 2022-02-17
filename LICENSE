@@ -1,6 +1,6 @@
 Files: *
-Copyright: 2021 Josh Schmelzle
-License: BSD-3
+Copyright: 2022 Josh Schmelzle
+License: BSD-3-Clause
 
 Files: /install/opt/wlanpi-hwtest/firmware/*
 Copyright: 2019, Raspberry Pi (Trading) Ltd.

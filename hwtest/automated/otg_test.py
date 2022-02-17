@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+#
+# wlanpi-hwtest : verification tools for the WLAN Pi Pro
+# Copyright : (c) 2022 Josh Schmelzle
+# License : BSD-3-Clause
+
 from hwtest.shell_utils import is_module_present, run_command
 
 # Further reading: https://michael.stapelberg.ch/posts/2021-04-27-linux-usb-virtual-serial-cdc-acm/
