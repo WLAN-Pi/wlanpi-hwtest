@@ -177,6 +177,10 @@ def button_press(gpio_pin: int):
 
     log.info(f"DETECTED PRESS ON GPIO PIN {gpio_pin} ({pressed})")
 
+    # if we're doing the color test
+    if cfg.COLOR_TEST_IN_PROGRESS:
+        cfg.PRESSED = True
+
     # if we're doing the live interactive button test
     # print to OLED virtual terminal
     if cfg.BUTTON_TEST_IN_PROGRESS:

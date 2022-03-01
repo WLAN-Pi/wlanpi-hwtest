@@ -106,14 +106,14 @@ def setup_parser() -> argparse.ArgumentParser:
         "--oled",
         dest="oled",
         action="store_true",
-        default=None,
+        default=False,
         help="enable OLED and interactive (I/A) tests",
     )
     parser.add_argument(
         "--firmware",
         dest="firmware",
         action="store_true",
-        default=None,
+        default=False,
         help="enable VL805 firmware check",
     )
     parser.add_argument(

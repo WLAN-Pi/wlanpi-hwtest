@@ -4,12 +4,13 @@
 # Copyright : (c) 2022 Josh Schmelzle
 # License : BSD-3-Clause
 
-from hwtest.shell_utils import is_module_present, run_command
+from hwtest.shell_utils import run_command
+
 
 def test_eeprom_bootloader_version_is_up_to_date():
     """
     Test: sudo CM4_ENABLE_RPI_EEPROM_UPDATE=1 rpi-eeprom-update
-    
+
     Description: check that bootloader is up to date
 
     Pass Example:
@@ -23,15 +24,17 @@ def test_eeprom_bootloader_version_is_up_to_date():
         BOOTLOADER: update available
         CURRENT: Tue 16 Feb 2021 01:23:36 PM UTC (1613481816)
         LATEST: Tue 25 Jan 2022 02:30:41 PM UTC (1643121041)
-    
+
         echo $? == 1
     """
 
     ret_code = run_command(
-        ["sudo", "CM4_ENABLE_RPI_EEPROM_UPDATE=1", "rpi-eeprom-update"], return_exit_values=True
+        ["sudo", "CM4_ENABLE_RPI_EEPROM_UPDATE=1", "rpi-eeprom-update"],
+        return_exit_values=True,
     )
 
     assert ret_code == 0
+
 
 def test_rpi_eeprom_config_power_off_on_halt():
     """

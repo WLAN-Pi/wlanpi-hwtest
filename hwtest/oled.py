@@ -161,6 +161,15 @@ def init():
     return device
 
 
+def print_message_colors(message, fgcolor, bgcolor):
+    if cfg.CONFIG.get("GENERAL").get("oled"):
+        cfg.TERMINAL._fgcolor = fgcolor
+        cfg.TERMINAL.default_fgcolor = fgcolor
+        cfg.TERMINAL.default_bgcolor = bgcolor
+        cfg.TERMINAL._bgcolor = bgcolor
+        cfg.TERMINAL.println(message)
+
+
 def print_term_icon_and_message(icon, message, icon_font=cfg.FASOLID, animate=False):
     if cfg.CONFIG.get("GENERAL").get("oled"):
         cfg.TERMINAL.animate = animate
