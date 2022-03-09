@@ -21,7 +21,16 @@
             "module": "hwtest",
             "sudo": true,
             "args": [
-                "--debug",
+                "--oled",
+            ]
+        },
+        {
+            "name": "hwtest --oled --debug",
+            "type": "python",
+            "request": "launch",
+            "module": "hwtest",
+            "sudo": true,
+            "args": [
                 "--oled",
             ]
         },

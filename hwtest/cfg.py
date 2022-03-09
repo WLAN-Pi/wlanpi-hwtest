@@ -22,6 +22,7 @@ from hwtest.automated.ethernet_test import get_ip_data
 # BUTTONS #
 ###########
 
+
 BUTTONS_PRESSED = {
     "BUTTON_UP": False,
     "BUTTON_DOWN": False,
@@ -61,6 +62,8 @@ def get_eth0_mac():
 CONFIG = {}
 RUNNING = False
 TESTING = False
+PRESSED = False
+COLOR_TEST_IN_PROGRESS = False
 BUTTON_TEST_IN_PROGRESS = False
 START_TIME = now()
 ETH0_MAC = get_eth0_mac()
