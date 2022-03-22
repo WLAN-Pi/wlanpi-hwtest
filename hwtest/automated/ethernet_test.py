@@ -24,7 +24,7 @@ class NetworkInterface:
     ipv4_prefix: int = None
 
 
-def get_ip_data(intf) -> NetworkInterface:
+def get_ip_data(_iface) -> NetworkInterface:
     # Get json output from `ip` command
     result = run_command(["ip", "-json", "address"])
     data = json.loads(result)
@@ -33,19 +33,20 @@ def get_ip_data(intf) -> NetworkInterface:
     for item in data:
         name = item["ifname"]
         interface_data[name] = item
+
     # Build dataclass for storage and easier test assertion
-    dobj = NetworkInterface()
-    if intf in interface_data.keys():
-        dobj.operstate = interface_data[intf]["operstate"]
-        dobj.ifname = interface_data[intf]["ifname"]
-        dobj.mac = interface_data[intf]["address"]
-        dobj.mtu = int(interface_data[intf]["mtu"])
-        dobj.ipv4_addr = interface_data[intf]["addr_info"][0]["local"]
-        dobj.ipv4_prefix = int(interface_data[intf]["addr_info"][0]["prefixlen"])
-    if "usb0" not in intf:
-        dobj.duplex = run_command(["cat", f"/sys/class/net/{intf}/duplex"])
-        dobj.speed = int(run_command(["cat", f"/sys/class/net/{intf}/speed"]))
-    return dobj
+    iface = NetworkInterface()
+
+    if _iface in interface_data.keys():
+        iface.operstate = interface_data.get(_iface, {}).get("operstate")
+        iface.ifname = interface_data.get(_iface, {}).get("ifname")
+        iface.mac = interface_data.get(_iface, {}).get("address")
+        iface.mtu = int(interface_data.get(_iface, {}).get("mtu"))
+    if "usb0" not in _iface:
+        iface.duplex = run_command(["cat", f"/sys/class/net/{_iface}/duplex"])
+        iface.speed = int(run_command(["cat", f"/sys/class/net/{_iface}/speed"]))
+
+    return iface
 
 
 @pytest.fixture()
