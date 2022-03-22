@@ -9,6 +9,11 @@ Documentation for important milestones and future roadmap items. Future does not
 
 ## Released
 
+### v1.0.14
+
+* fix ethernet test which was failing
+* log output to html tests with "--capture=tee-sys" where "-s" was suppressing output.
+
 ### v1.0.13
 
 * default behavior change: firmware upgrade is now disabled by default

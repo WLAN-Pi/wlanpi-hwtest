@@ -1,6 +1,7 @@
-wlanpi-hwtest (1.0.14) unstable; urgency=medium
+wlanpi-hwtest (1.0.14-1) unstable; urgency=medium
 
   * Fix error in Ethernet test
+  * Fix log output in pytest-html reports
 
  --  Josh Schmelzle <josh@joshschmelzle.com>  Mon, 21 Mar 2022 21:28:45 -0500
 
