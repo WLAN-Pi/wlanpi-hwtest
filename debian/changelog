@@ -1,3 +1,9 @@
+wlanpi-hwtest (1.0.14) unstable; urgency=medium
+
+  * Fix error in Ethernet test
+
+ --  Josh Schmelzle <josh@joshschmelzle.com>  Mon, 21 Mar 2022 21:28:45 -0500
+
 wlanpi-hwtest (1.0.13) unstable; urgency=medium
 
   * rgb tests
