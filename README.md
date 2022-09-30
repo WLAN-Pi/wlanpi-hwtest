@@ -30,6 +30,7 @@ optional arguments:
 - Install hwtest and disable the service
 
 ```bash
+sudo apt update
 sudo apt install wlanpi-hwtest
 sudo systemctl disable wlanpi-hwtest
 ```
@@ -45,6 +46,10 @@ sudo systemctl stop wlanpi-fpms
 ```bash
 sudo hwtest --buttons --oled
 ```
+
+Example:
+
+![image](https://user-images.githubusercontent.com/13954434/193359114-7a4f6398-fa78-4a7e-bdda-4fcc3f4222c7.png)
 
 ## Logs
 
