@@ -24,6 +24,7 @@ from distutils.util import strtobool
 from typing import Any, Dict
 
 import hwtest.cfg as cfg
+from hwtest.platform import PLATFORM, PLATFORM_PRO, PLATFORM_R4
 
 from .__version__ import __version__
 
@@ -117,6 +118,20 @@ def setup_parser() -> argparse.ArgumentParser:
         help="enable VL805 firmware check",
     )
     parser.add_argument(
+        "--waveshare",
+        dest="waveshare",
+        action="store_true",
+        default=False,
+        help="enable waveshare LCD",
+    )
+    parser.add_argument(
+        "--buttonsmash",
+        dest="buttonsmash",
+        action="store_true",
+        default=False,
+        help="enable buttonsmash mode and print button presses to CLI",
+    )
+    parser.add_argument(
         "--verbose",
         dest="verbose",
         action="store_true",
@@ -147,7 +162,9 @@ def ConfigParser_to_Dict(config: configparser.ConfigParser) -> Dict:
 
 
 def read_config(args) -> Dict:
-    """Create the configuration (SSID, channel, interface, etc) for the Profiler"""
+    """Create the configuration (SSID, channel, interface, etc) for the wlanpi-hwtest"""
+    global PLATFORM
+
     log = logging.getLogger(inspect.stack()[0][3])
 
     # load in config (a: from default location "/etc/wlanpi-hwtest/config.ini" or b: from provided)
@@ -173,8 +190,17 @@ def read_config(args) -> Dict:
     if args.oled:
         config["GENERAL"]["oled"] = args.oled
 
+    if PLATFORM == PLATFORM_R4 or args.waveshare or os.path.exists("/boot/waveshare"):
+        PLATFORM = PLATFORM_R4
+    else:
+        PLATFORM = PLATFORM_PRO
+    cfg.setup_buttons()
+
     if args.firmware:
         config["GENERAL"]["firmware"] = args.firmware
+
+    if args.buttonsmash:
+        config["GENERAL"]["buttonsmash"] = args.buttonsmash
 
     if args.verbose:
         config["GENERAL"]["verbose"] = args.verbose
@@ -183,5 +209,4 @@ def read_config(args) -> Dict:
 
     if args.emulate:
         config["GENERAL"]["emulate"] = args.emulate
-
     return config

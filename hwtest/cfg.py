@@ -11,33 +11,76 @@ wlanpi-hwtest.cfg
 module for sharing conf and objects across hwtest
 """
 
+import logging
 import os
 from datetime import datetime
 
 from PIL import ImageFont
 
 from hwtest.automated.ethernet_test import get_ip_data
+from hwtest.platform import (
+    PLATFORM,
+    PLATFORM_M4,
+    PLATFORM_PRO,
+    PLATFORM_R4,
+)
+
+LOG = logging.getLogger("cfg.py")
 
 ###########
 # BUTTONS #
 ###########
 
 
-BUTTONS_PRESSED = {
-    "BUTTON_UP": False,
-    "BUTTON_DOWN": False,
-    "BUTTON_LEFT": False,
-    "BUTTON_RIGHT": False,
-    "BUTTON_CENTER": False,
-}
+def setup_buttons():
+    global BUTTONS_PRESSED
+    global BUTTONS_PRINTED
+    if PLATFORM == PLATFORM_PRO:
+        BUTTONS_PRESSED = {
+            "BUTTON_UP": False,
+            "BUTTON_DOWN": False,
+            "BUTTON_LEFT": False,
+            "BUTTON_RIGHT": False,
+            "BUTTON_CENTER": False,
+        }
+    elif PLATFORM == PLATFORM_M4 or PLATFORM == PLATFORM_R4:
+        BUTTONS_PRESSED = {
+            "BUTTON_UP": False,
+            "BUTTON_DOWN": False,
+            "BUTTON_LEFT": False,
+            "BUTTON_RIGHT": False,
+            "BUTTON_CENTER": False,
+            "BUTTON_KEY1": False,
+            "BUTTON_KEY2": False,
+            "BUTTON_KEY3": False,
+        }
+    else:
+        BUTTONS_PRESSED = {}
 
-BUTTONS_PRINTED = {
-    "BUTTON_UP": False,
-    "BUTTON_DOWN": False,
-    "BUTTON_LEFT": False,
-    "BUTTON_RIGHT": False,
-    "BUTTON_CENTER": False,
-}
+    if PLATFORM == PLATFORM_PRO:
+        BUTTONS_PRINTED = {
+            "BUTTON_UP": False,
+            "BUTTON_DOWN": False,
+            "BUTTON_LEFT": False,
+            "BUTTON_RIGHT": False,
+            "BUTTON_CENTER": False,
+        }
+    elif PLATFORM == PLATFORM_M4 or PLATFORM == PLATFORM_R4:
+        BUTTONS_PRINTED = {
+            "BUTTON_UP": False,
+            "BUTTON_DOWN": False,
+            "BUTTON_LEFT": False,
+            "BUTTON_RIGHT": False,
+            "BUTTON_CENTER": False,
+            "BUTTON_KEY1": False,
+            "BUTTON_KEY2": False,
+            "BUTTON_KEY3": False,
+        }
+    else:
+        BUTTONS_PRINTED = {}
+    # LOG.debug("BUTTONS_PRINTED: %s" % BUTTONS_PRINTED)
+    # LOG.debug("BUTTONS_PRESSED: %s" % BUTTONS_PRESSED)
+
 
 ###########
 # GENERIC #

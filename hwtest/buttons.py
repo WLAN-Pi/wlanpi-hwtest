@@ -13,7 +13,6 @@ button handling code
 
 import inspect
 import logging
-import os
 import sys
 import termios
 import threading
@@ -25,6 +24,11 @@ from gpiozero.pins.mock import MockFactory
 
 import hwtest.cfg as cfg
 from hwtest.oled import print_term_icon_and_message
+from hwtest.platform import (
+    PLATFORM,
+    PLATFORM_M4,
+    PLATFORM_R4,
+)
 
 # Button mapping for the WLAN Pi Pro v1 Rev1
 BUTTONS_WLANPI_PRO_V1_REV1 = {
@@ -52,14 +56,21 @@ BUTTONS_WAVESHARE = {
     "left": 5,
     "right": 26,
     "center": 13,
+    "key1": 21,
+    "key2": 20,
+    "key3": 16,
 }
 
 PINS = {}
 
-if os.path.exists("/boot/waveshare"):
+LOG = logging.getLogger("buttons.py")
+LOG.debug("cfg.PLATFORM is %s" % cfg.PLATFORM)
+if cfg.PLATFORM == PLATFORM_R4:
     PINS = BUTTONS_WAVESHARE
+    LOG.debug("Using buttons for Waveshare (R4/M4)")
 else:
     PINS = BUTTONS_WLANPI_PRO_V1_REV2
+    LOG.debug("Using buttons for PRO V1 REV2")
 
 
 def getch():
@@ -116,6 +127,24 @@ def button_emulation():
             BUTTON_CENTER.pin.drive_high()
             cfg.BUTTONS_PRESSED["BUTTON_CENTER"] = True
 
+        if char == PINS.get("key1") or char == "1":
+            log.info("EMULATE BUTTON KEY1 PRESSED")
+            BUTTON_KEY1.pin.drive_low()
+            BUTTON_KEY1.pin.drive_high()
+            cfg.BUTTONS_PRESSED["BUTTON_KEY1"] = True
+
+        if char == PINS.get("key2") or char == "1":
+            log.info("EMULATE BUTTON KEY2 PRESSED")
+            BUTTON_KEY2.pin.drive_low()
+            BUTTON_KEY2.pin.drive_high()
+            cfg.BUTTONS_PRESSED["BUTTON_KEY2"] = True
+
+        if char == PINS.get("key3") or char == "3":
+            log.info("EMULATE BUTTON KEY3 PRESSED")
+            BUTTON_KEY3.pin.drive_low()
+            BUTTON_KEY3.pin.drive_high()
+            cfg.BUTTONS_PRESSED["BUTTON_KEY3"] = True
+
 
 # this must run before gpiozero button objects are created in order for button emulation to work.
 
@@ -164,12 +193,38 @@ def _println(pressed, gpio_pin):
                     "\uf192", f"{pressed}/{gpio_pin} PRESS", icon_font=cfg.FAREGULAR
                 )
                 return
+        if "KEY1" in pressed:
+            if not cfg.BUTTONS_PRINTED["BUTTON_KEY1"]:
+                cfg.BUTTONS_PRINTED["BUTTON_KEY1"] = True
+                # https://fontawesome.com/v5.15/icons/dot-circle?style=regular
+                print_term_icon_and_message(
+                    "\uf11c", f"{pressed}/{gpio_pin} PRESS", icon_font=cfg.FAREGULAR
+                )
+                return
+        if "KEY2" in pressed:
+            if not cfg.BUTTONS_PRINTED["BUTTON_KEY2"]:
+                cfg.BUTTONS_PRINTED["BUTTON_KEY2"] = True
+                # https://fontawesome.com/v5.15/icons/dot-circle?style=regular
+                print_term_icon_and_message(
+                    "\uf11c", f"{pressed}/{gpio_pin} PRESS", icon_font=cfg.FAREGULAR
+                )
+                return
+        if "KEY3" in pressed:
+            if not cfg.BUTTONS_PRINTED["BUTTON_KEY3"]:
+                cfg.BUTTONS_PRINTED["BUTTON_KEY3"] = True
+                # https://fontawesome.com/v5.15/icons/dot-circle?style=regular
+                print_term_icon_and_message(
+                    "\uf11c", f"{pressed}/{gpio_pin} PRESS", icon_font=cfg.FAREGULAR
+                )
+                return
 
 
 def button_press(gpio_pin: int):
     log = logging.getLogger(inspect.stack()[0][3])
 
     pressed = ""
+    log.debug("TARGET PINS: %s" % PINS.items())
+    log.debug("ACTIVE PIN: %s" % gpio_pin)
     for button, pin in PINS.items():
         if gpio_pin == pin:
             pressed = button.upper()
@@ -186,7 +241,17 @@ def button_press(gpio_pin: int):
     if cfg.BUTTON_TEST_IN_PROGRESS:
         if cfg.CONFIG.get("GENERAL").get("oled"):
             if pressed:
-                if pressed in ("LEFT", "UP", "DOWN", "CENTER", "RIGHT"):
+                if pressed in (
+                    "LEFT",
+                    "UP",
+                    "DOWN",
+                    "CENTER",
+                    "RIGHT",
+                    "KEY1",
+                    "KEY2",
+                    "KEY3",
+                ):
+                    # log.info(f"* {pressed} {gpio_pin}")
                     _println(pressed, gpio_pin)
                     return
                 else:
@@ -218,14 +283,57 @@ def center_press():
     cfg.BUTTONS_PRESSED["BUTTON_CENTER"] = True
 
 
-BUTTON_DOWN = GPIO_Button(PINS["down"])
-BUTTON_UP = GPIO_Button(PINS["up"])
-BUTTON_LEFT = GPIO_Button(PINS["left"])
-BUTTON_RIGHT = GPIO_Button(PINS["right"])
-BUTTON_CENTER = GPIO_Button(PINS["center"])
+def key1_press():
+    button_press(PINS["key1"])
+    cfg.BUTTONS_PRESSED["BUTTON_KEY1"] = True
 
-BUTTON_DOWN.when_pressed = down_press
-BUTTON_UP.when_pressed = up_press
-BUTTON_LEFT.when_pressed = left_press
-BUTTON_RIGHT.when_pressed = right_press
-BUTTON_CENTER.when_pressed = center_press
+
+def key2_press():
+    button_press(PINS["key2"])
+    cfg.BUTTONS_PRESSED["BUTTON_KEY2"] = True
+
+
+def key3_press():
+    button_press(PINS["key2"])
+    cfg.BUTTONS_PRESSED["BUTTON_KEY3"] = True
+
+
+BUTTON_DOWN = None
+BUTTON_UP = None
+BUTTON_LEFT = None
+BUTTON_RIGHT = None
+BUTTON_CENTER = None
+BUTTON_KEY1 = None
+BUTTON_KEY2 = None
+BUTTON_KEY3 = None
+
+
+def init():
+    global BUTTON_DOWN
+    global BUTTON_UP
+    global BUTTON_LEFT
+    global BUTTON_RIGHT
+    global BUTTON_CENTER
+    global BUTTON_KEY1
+    global BUTTON_KEY2
+    global BUTTON_KEY3
+
+    BUTTON_DOWN = GPIO_Button(PINS["down"])
+    BUTTON_UP = GPIO_Button(PINS["up"])
+    BUTTON_LEFT = GPIO_Button(PINS["left"])
+    BUTTON_RIGHT = GPIO_Button(PINS["right"])
+    BUTTON_CENTER = GPIO_Button(PINS["center"])
+
+    BUTTON_DOWN.when_pressed = down_press
+    BUTTON_UP.when_pressed = up_press
+    BUTTON_LEFT.when_pressed = left_press
+    BUTTON_RIGHT.when_pressed = right_press
+    BUTTON_CENTER.when_pressed = center_press
+
+    if PLATFORM == PLATFORM_R4 or PLATFORM == PLATFORM_M4:
+        BUTTON_KEY1 = GPIO_Button(PINS["key1"])
+        BUTTON_KEY2 = GPIO_Button(PINS["key2"])
+        BUTTON_KEY3 = GPIO_Button(PINS["key3"])
+        BUTTON_KEY1.when_pressed = key1_press
+        BUTTON_KEY2.when_pressed = key2_press
+        BUTTON_KEY3.when_pressed = key3_press

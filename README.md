@@ -2,14 +2,14 @@
 
 # wlanpi-hwtest
 
-`hwtest` is a tool for the WLAN Pi Pro used to update VLI USB controller EEPROMs and run pytest to drive pass/fail testing.
+`hwtest` is a tool for the WLAN Pi project used to update VLI USB controller EEPROMs and run pytest to drive pass/fail testing.
 
 ## Example CLI usage
 
 Optional arguments may be passed in to override default behaviors set in `/etc/wlanpi-hwtest/config.ini`. 
 
 ```bash
-usage: hwtest [-h] [--debug] [-e] [--oled] [--firmware] [--verbose] [--version]
+usage: hwtest [-h] [--debug] [-e] [--oled] [--firmware] [--waveshare] [--buttonsmash] [--verbose] [--version]
 
 hwtest is a VLI USB Controller EEPROM updater and hardware testing tool for the WLAN Pi Pro.
 
@@ -19,8 +19,31 @@ optional arguments:
   -e, --emulate  enable keyboard emulation
   --oled         enable OLED and interactive (I/A) tests
   --firmware     enable VL805 firmware check
+  --waveshare    enable waveshare LCD
+  --buttonsmash  enable buttonsmash mode and print button presses to CLI
   --verbose      enable verbose printing of results to oled
   --version, -V  show program's version number and exit
+```
+
+## Buttonsmash mode
+
+- Install hwtest and disable the service
+
+```bash
+sudo apt install wlanpi-hwtest
+sudo systemctl disable wlanpi-hwtest
+```
+
+- Stop FPMS service 
+
+```bash
+sudo systemctl stop wlanpi-fpms
+```
+
+- Start `hwtest` in buttonsmash mode with OLED from CLI
+
+```bash
+sudo hwtest --buttons --oled
 ```
 
 ## Logs

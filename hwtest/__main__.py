@@ -11,6 +11,8 @@ wlanpi-hwtest.__main__.py
 Entry point for hwtest
 """
 
+import inspect
+import logging
 import os
 import platform
 import signal
@@ -45,12 +47,14 @@ if not elevated_permissions():
 
 def main():
     """Set up args and start the testing suites"""
+    log = logging.getLogger(inspect.stack()[0][3])
     from . import helpers
 
     parser = helpers.setup_parser()
     args = parser.parse_args()
     helpers.setup_logger(args)
     hwtest.cfg.CONFIG = helpers.read_config(args)
+    log.debug("CONFIG: %s" % hwtest.cfg.CONFIG)
 
     if hwtest.cfg.CONFIG.get("GENERAL").get("firmware"):
         if vl805.check_and_upgrade_firmware():

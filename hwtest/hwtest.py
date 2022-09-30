@@ -16,6 +16,7 @@ import inspect
 import logging
 import os
 import sys
+import time
 from typing import Dict
 
 import pytest
@@ -38,12 +39,29 @@ def start():
 
     try:
         oled = cfg.CONFIG.get("GENERAL").get("oled")
-        verbose = cfg.CONFIG.get("GENERAL").get("verbose")
         if oled:
             import hwtest.buttons as btn  # fmt: skip
-
-            # init oled
+            btn.init()
             init_oled_luma_terminal()
+
+        verbose = cfg.CONFIG.get("GENERAL").get("verbose")
+        buttonsmash = cfg.CONFIG.get("GENERAL").get("buttonsmash")
+        log.debug("buttonsmash: %s" % buttonsmash)
+        if buttonsmash:
+            log.info("BUTTON SMASH MODE.")
+            log.info("GO HAM. (:")
+            import hwtest.buttons as btn  # fmt: skip
+            if cfg.CONFIG.get("GENERAL").get("oled"):
+                cfg.TERMINAL.println("BUTTON SMASH MODE.")
+                cfg.TERMINAL.println("GO HAM. (:")
+
+            cfg.BUTTON_TEST_IN_PROGRESS = True
+            while cfg.RUNNING:
+                if not cfg.BUTTON_TEST_IN_PROGRESS:
+                    time.sleep(0.01)
+                    break
+
+        if oled:
             cfg.TERMINAL.println("# START AUTO TESTS")
 
         # run automated tests and get report
