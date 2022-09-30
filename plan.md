@@ -7,6 +7,12 @@ Documentation for important milestones and future roadmap items. Future does not
 * better interactivity
 * potential integration with fpms 
 
+## Unreleased
+
+### v1.1.0
+
+* add initial support for waveshare 1.44 display
+
 ## Released
 
 ### v1.0.14
