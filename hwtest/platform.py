@@ -31,7 +31,7 @@ if "Raspberry Pi 4 Model B" in CPUINFO:
 if "Compute Module 4" in CPUINFO:
     PLATFORM = PLATFORM_PRO
 
-LSPCI_INFO subprocess.check_output("lspci", shell=True).decode().strip()
+LSPCI_INFO = subprocess.check_output("lspci", shell=True).decode().strip()
 
 if "VL805" not in LSPCI_INFO
     PLATFORM = PLATFORM_M4
