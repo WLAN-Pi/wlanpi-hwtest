@@ -23,7 +23,8 @@ from luma.core import cmdline, error
 
 import hwtest.cfg as cfg
 from hwtest.__version__ import __version__
-from hwtest.platform import PLATFORM_M4, PLATFORM_PRO, PLATFORM_R4, PLATFORM_UNKNOWN
+from hwtest.platform import (PLATFORM_M4, PLATFORM_PRO, PLATFORM_R4,
+                             PLATFORM_UNKNOWN)
 
 # set possible vars to None
 DISPLAY_TYPE = None

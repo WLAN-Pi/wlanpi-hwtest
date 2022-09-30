@@ -25,7 +25,8 @@ from gpiozero.pins.mock import MockFactory
 
 import hwtest.cfg as cfg
 from hwtest.oled import print_term_icon_and_message
-from hwtest.platform import PLATFORM_M4, PLATFORM_PRO, PLATFORM_R4, PLATFORM_UNKNOWN
+from hwtest.platform import (PLATFORM_M4, PLATFORM_PRO, PLATFORM_R4,
+                             PLATFORM_UNKNOWN)
 
 # Button mapping for the WLAN Pi Pro v1 Rev1
 BUTTONS_WLANPI_PRO_V1_REV1 = {
@@ -295,20 +296,39 @@ def key3_press():
     cfg.BUTTONS_PRESSED["BUTTON_KEY3"] = True
 
 
-BUTTON_DOWN = GPIO_Button(PINS["down"])
-BUTTON_UP = GPIO_Button(PINS["up"])
-BUTTON_LEFT = GPIO_Button(PINS["left"])
-BUTTON_RIGHT = GPIO_Button(PINS["right"])
-BUTTON_CENTER = GPIO_Button(PINS["center"])
-BUTTON_KEY1 = GPIO_Button(PINS["key1"])
-BUTTON_KEY2 = GPIO_Button(PINS["key2"])
-BUTTON_KEY3 = GPIO_Button(PINS["key3"])
+BUTTON_DOWN = None
+BUTTON_UP = None
+BUTTON_LEFT = None
+BUTTON_RIGHT = None
+BUTTON_CENTER = None
+BUTTON_KEY1 = None
+BUTTON_KEY2 = None
+BUTTON_KEY3 = None
 
-BUTTON_DOWN.when_pressed = down_press
-BUTTON_UP.when_pressed = up_press
-BUTTON_LEFT.when_pressed = left_press
-BUTTON_RIGHT.when_pressed = right_press
-BUTTON_CENTER.when_pressed = center_press
-BUTTON_KEY1.when_pressed = key1_press
-BUTTON_KEY2.when_pressed = key2_press
-BUTTON_KEY3.when_pressed = key3_press
+
+def init():
+    global BUTTON_DOWN
+    global BUTTON_UP
+    global BUTTON_LEFT
+    global BUTTON_RIGHT
+    global BUTTON_CENTER
+
+    BUTTON_DOWN = GPIO_Button(PINS["down"])
+    BUTTON_UP = GPIO_Button(PINS["up"])
+    BUTTON_LEFT = GPIO_Button(PINS["left"])
+    BUTTON_RIGHT = GPIO_Button(PINS["right"])
+    BUTTON_CENTER = GPIO_Button(PINS["center"])
+
+    BUTTON_DOWN.when_pressed = down_press
+    BUTTON_UP.when_pressed = up_press
+    BUTTON_LEFT.when_pressed = left_press
+    BUTTON_RIGHT.when_pressed = right_press
+    BUTTON_CENTER.when_pressed = center_press
+
+    if cfg.PLATFORM_M4 or cfg.PLATFORM_R4:
+        BUTTON_KEY1 = GPIO_Button(PINS["key1"])
+        BUTTON_KEY2 = GPIO_Button(PINS["key2"])
+        BUTTON_KEY3 = GPIO_Button(PINS["key3"])
+        BUTTON_KEY1.when_pressed = key1_press
+        BUTTON_KEY2.when_pressed = key2_press
+        BUTTON_KEY3.when_pressed = key3_press

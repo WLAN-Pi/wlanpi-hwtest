@@ -18,13 +18,8 @@ from datetime import datetime
 from PIL import ImageFont
 
 from hwtest.automated.ethernet_test import get_ip_data
-from hwtest.platform import (
-    PLATFORM,
-    PLATFORM_M4,
-    PLATFORM_PRO,
-    PLATFORM_R4,
-    PLATFORM_UNKNOWN,
-)
+from hwtest.platform import (PLATFORM, PLATFORM_M4, PLATFORM_PRO, PLATFORM_R4,
+                             PLATFORM_UNKNOWN)
 
 LOG = logging.getLogger("cfg.py")
 
