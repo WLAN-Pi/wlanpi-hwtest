@@ -1,4 +1,4 @@
-# Plan
+# CHANGELOG 
 
 Documentation for important milestones and future roadmap items. Future does not mean committed.
 
@@ -9,11 +9,13 @@ Documentation for important milestones and future roadmap items. Future does not
 
 ## Unreleased
 
-### v1.1.0
-
-* add initial support for waveshare 1.44 display
+N/A
 
 ## Released
+
+### v1.1.0-beta1
+
+* add initial support for waveshare 1.44 display
 
 ### v1.0.14
 
