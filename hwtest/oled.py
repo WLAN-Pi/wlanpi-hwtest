@@ -13,7 +13,6 @@ define and init OLED objects for hwtest
 
 import inspect
 import logging
-import os
 import sys
 import threading
 import time
@@ -23,8 +22,7 @@ from luma.core import cmdline, error
 
 import hwtest.cfg as cfg
 from hwtest.__version__ import __version__
-from hwtest.platform import (PLATFORM_M4, PLATFORM_PRO, PLATFORM_R4,
-                             PLATFORM_UNKNOWN)
+from hwtest.platform import PLATFORM_PRO, PLATFORM_R4
 
 # set possible vars to None
 DISPLAY_TYPE = None
@@ -249,7 +247,6 @@ def init_oled_luma_terminal():
         DISPLAY_TYPE = "ssd1351"
     log.debug("DISPLAY_TYPE %s" % DISPLAY_TYPE)
 
-    COLOR_ORDER_BGR = True
     INTERFACE_TYPE = "spi"
     SPI_PORT = 0
     SPI_DEVICE = 0
