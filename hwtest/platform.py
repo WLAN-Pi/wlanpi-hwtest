@@ -33,5 +33,5 @@ if "Compute Module 4" in CPUINFO:
 
 LSPCI_INFO = subprocess.check_output("lspci", shell=True).decode().strip()
 
-if "VL805" not in LSPCI_INFO
+if "VL805" not in LSPCI_INFO:
     PLATFORM = PLATFORM_M4
