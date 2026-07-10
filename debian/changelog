@@ -1,3 +1,12 @@
+wlanpi-hwtest (1.1.0-beta3) unstable; urgency=high
+
+  * Security: Pillow 12.3.0 (CVE fixes: PSD OOB writes, FITS decompression
+    bomb, PDF trailer DoS, font integer overflow, heap buffer overflow)
+  * Security: pytest 9.0.3 (vulnerable tmpdir handling)
+  * pytest-html 4.2.0 and pytest-json-report 1.5.0 for pytest 9 compat
+
+ --  Josh Schmelzle <josh@joshschmelzle.com>  Fri, 10 Jul 2026 00:02:52 -0400
+
 wlanpi-hwtest (1.1.0-beta2) unstable; urgency=medium
 
   * Rebuild to publish packages for Debian trixie to packagecloud
