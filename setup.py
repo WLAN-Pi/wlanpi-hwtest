@@ -64,7 +64,7 @@ setup(
         "luma.lcd==2.9.0",
         "rpi.gpio==0.7.1",
         "gpiozero==1.6.2",
-        "Pillow==9.0.1", 
+        "Pillow==11.3.0", 
     ],
     entry_points={"console_scripts": ["hwtest=hwtest.__main__:main"]},
 )

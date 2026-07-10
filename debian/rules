@@ -24,9 +24,10 @@ PKG_PREFIX=debian/wlanpi-hwtest
 override_dh_virtualenv:
 	dh_virtualenv $(DH_VENV_ARGS)
 	$(DH_VENV_DIR)/bin/python $(DH_VENV_DIR)/bin/pip install -I --no-binary Pillow $(PILLOW_SPEC) --no-cache-dir
+	rm -rf $(DH_VENV_DIR)/lib/python*/site-packages/pillow.libs
 
 override_dh_strip:
 	dh_strip --exclude=cffi --exclude=_imaging --exclude=libtiff
 	
 override_dh_shlibdeps:
-	dh_shlibdeps -X/Pillow.libs/ -X/PIL/ 
+	dh_shlibdeps -X/Pillow.libs/ -X/pillow.libs/ -X/PIL/
