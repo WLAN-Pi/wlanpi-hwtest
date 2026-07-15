@@ -1,3 +1,9 @@
+wlanpi-hwtest (1.1.0-beta4) unstable; urgency=medium
+
+  * Rebuild to publish packages for Debian trixie to packagecloud.
+
+ -- Josh Schmelzle <josh@joshschmelzle.com>  Wed, 15 Jul 2026 03:20:17 -0400
+
 wlanpi-hwtest (1.1.0-beta3) unstable; urgency=high
 
   * Security: Pillow 12.3.0 (CVE fixes: PSD OOB writes, FITS decompression
