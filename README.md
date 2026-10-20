@@ -32,7 +32,7 @@ options:
   --version, -V  show program's version number and exit
 ```
 
-`--firmware` writes the VL805 USB controller EEPROM and then reboots the WLAN Pi.
+`--firmware` checks the VL805 USB controller EEPROM. If the check fails, it writes new firmware and reboots the WLAN Pi.
 
 ## Buttonsmash Mode
 

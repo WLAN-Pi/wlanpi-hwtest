@@ -13,10 +13,10 @@
 - The target is Debian Trixie on BCM2711 boards. GPIO numbers in sysfs start at 512, so RPi.GPIO edge detection and gpiozero's native backend fail. Read the buttons with `gpiod` on `/dev/gpiochip0`, as wlanpi-fpms does.
 - RPi.GPIO stays as a dependency because luma.core drives the display control pins with it.
 - Use `pinctrl`, not `raspi-gpio`, and `/boot/firmware/config.txt`, not `/boot/config.txt`.
-- Never run with `--firmware` and never set `firmware: True` without the device owner's approval. It writes the VL805 USB controller EEPROM and then reboots the WLAN Pi.
+- Never run with `--firmware` and never set `firmware: True` without the device owner's approval. When the VL805 USB controller EEPROM check fails, it writes new firmware and reboots the WLAN Pi.
 
 ## Packaging
 
 - The package is a dh-virtualenv build pinned to `python3.13`. `requirements.txt` holds every runtime pin, and `pyproject.toml` reads it.
 - Installing never enables or starts `wlanpi-hwtest.service` (`dh_installsystemd --no-enable --no-start`). Keep it that way.
-- A `debian/changelog` change merged to `main` deploys to Packagecloud. The deploy workflow checks that `hwtest/__version__.py` equals the changelog version without its `-N` revision.
+- A `debian/changelog` change merged to `main` deploys to Packagecloud. The deploy workflow compares only `major.minor.patch` of `hwtest/__version__.py` and the changelog, so keep any pre-release suffix in step by hand.
