@@ -55,14 +55,14 @@ def test_gpio_fan_mod():
 def test_gpio_fan_conf():
     """
     Test command:
-        read /boot/config.txt
+        read /boot/firmware/config.txt
 
     Results:
         True - "gpio-fan" exists in config.txt
         False - "gpio-fan" not found in config.txt
     """
 
-    with open("/boot/config.txt", "r") as f:
+    with open("/boot/firmware/config.txt", "r") as f:
         config_lines = f.readlines()
 
     results = [r for r in config_lines if "gpio-fan" in r]
