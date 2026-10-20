@@ -1,3 +1,2 @@
 include hwtest/pytest.ini
-graft hwtest/templates
 graft hwtest/fonts
