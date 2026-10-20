@@ -6,41 +6,29 @@ on:
 
   pull_request:
     paths:
-      - 'debian/changelog'
+      - 'debian/**'
+      - 'requirements.txt'
+      - 'pyproject.toml'
+      - '.github/workflows/build-and-archive-debian-package.yml'
 
 permissions:
   contents: read
   actions: read
 
 jobs:
+  format:
+    name: Get formatted version for filename
+    uses: WLAN-Pi/gh-workflows/.github/workflows/get-formatted-version-string.yml@main
+
   sbuild:
-    name: sbuild ${{ matrix.distro }}+${{ matrix.arch }}
+    name: sbuild pkg
+    needs:
+      - format
+    uses: WLAN-Pi/gh-workflows/.github/workflows/sbuild-pkg.yml@main
+    with:
+      pkg: wlanpi-hwtest
+      version: ${{ needs.format.outputs.version }}
 
-    runs-on: 'ubuntu-24.04-arm'
-
-    strategy:
-      fail-fast: false
-      matrix:
-        distro: [trixie]
-        arch: [arm64]
-    
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: sbuild for ${{ matrix.distro }} ${{ matrix.arch }}
-        uses: wlan-pi/sbuild-debian-package@main
-        id: build-debian-package
-        with:
-          distro: ${{ matrix.distro }}
-          arch: ${{ matrix.arch }}
-
-      - name: Archive artifacts and upload to GitHub
-        uses: actions/upload-artifact@v7
-        with:
-          name: wlanpi-hwtest-${{ matrix.distro }}-${{ matrix.arch }}
-          path: ${{ steps.build-debian-package.outputs.deb-package }}
-  
   slack-workflow-status:
     if: ${{ always() && github.repository_owner == 'WLAN-Pi' && ! github.event.pull_request.head.repo.fork }}
     name: Post Workflow Status to Slack

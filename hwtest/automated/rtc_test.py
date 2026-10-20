@@ -17,7 +17,7 @@ def test_rtc_pcf85063_mod():
         False - not detected
     """
 
-    assert is_module_present("rtc_pcf85063") == True
+    assert is_module_present("rtc_pcf85063")
 
 
 def test_rtc0_exists():

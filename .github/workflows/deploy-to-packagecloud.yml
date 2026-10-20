@@ -15,63 +15,32 @@ permissions:
   actions: read
 
 jobs:
-  sbuild:
-    name: sbuild ${{ matrix.distro }}+${{ matrix.arch }}
-    
-    runs-on: 'ubuntu-24.04-arm'
+  check_version:
+    name: Check py & deb pkg versions match
+    uses: WLAN-Pi/gh-workflows/.github/workflows/check-py-deb-pkg-versions-match.yml@main
+    with:
+      python_version_file_path: 'hwtest/__version__.py'
 
-    strategy:
-      fail-fast: false
-      matrix:
-        distro: [trixie]
-        arch: [arm64]
+  format:
+    name: Get formatted version for filename
+    uses: WLAN-Pi/gh-workflows/.github/workflows/get-formatted-version-string.yml@main
 
-    environment: PACKAGECLOUD
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: sbuild for ${{ matrix.distro }} ${{ matrix.arch }}
-        uses: wlan-pi/sbuild-debian-package@main
-        id: build-debian-package
-        with:
-          distro: ${{ matrix.distro }}
-          arch: ${{ matrix.arch }}
-
-      - name: Archive artifacts and upload to GitHub
-        uses: actions/upload-artifact@v7
-        with:
-          name: wlanpi-hwtest-${{ matrix.distro }}-${{ matrix.arch }}
-          path: ${{ steps.build-debian-package.outputs.deb-package }}
-
-      # Push with the package_cloud CLI directly instead of an action so upload
-      # errors are detected: the CLI exits 0 even when a push fails (Thor bug),
-      # which has produced green runs that uploaded nothing.
-      - name: Upload package to packagecloud ${{ matrix.distro }}
-        env:
-          PACKAGECLOUD_TOKEN: ${{ secrets.PACKAGECLOUD_TOKEN }}
-          DEB_PACKAGE: ${{ steps.build-debian-package.outputs.deb-package }}
-        run: |
-          if [ -z "${DEB_PACKAGE}" ]; then
-            echo "::error::sbuild produced no .deb package"
-            exit 1
-          fi
-          case "${{ matrix.arch }}" in
-            armhf) target="wlanpi/dev/raspbian/${{ matrix.distro }}" ;;
-            *)     target="wlanpi/dev/debian/${{ matrix.distro }}" ;;
-          esac
-          sudo gem install package_cloud -v 0.3.15
-          echo "Pushing ${DEB_PACKAGE} to ${target}"
-          out=$(package_cloud push "${target}" "${DEB_PACKAGE}" 2>&1) || true
-          echo "${out}"
-          echo "${out}" | grep -q "Pushing .*success!"
+  sbuild_deploy:
+    name: sbuild deploy pkg
+    needs:
+      - format
+      - check_version
+    uses: WLAN-Pi/gh-workflows/.github/workflows/sbuild-deploy-pkg.yml@main
+    with:
+      pkg: wlanpi-hwtest
+      version: ${{ needs.format.outputs.version }}
+    secrets: inherit
 
   slack-workflow-status:
     if: ${{ always() && github.repository_owner == 'WLAN-Pi' && ! github.event.pull_request.head.repo.fork }}
     name: Post Workflow Status to Slack
     needs:
-      - sbuild
+      - sbuild_deploy
     runs-on: 'ubuntu-24.04-arm'
     steps:
       - name: Slack Workflow Notification

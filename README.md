@@ -1,19 +1,26 @@
-[![packagecloud-badge](https://img.shields.io/badge/deb-packagecloud.io-844fec.svg)](https://packagecloud.io/)
+[![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](LICENSE) [![Tests](https://github.com/WLAN-Pi/wlanpi-hwtest/actions/workflows/python-tests.yml/badge.svg)](https://github.com/WLAN-Pi/wlanpi-hwtest/actions/workflows/python-tests.yml) [![packagecloud](https://img.shields.io/badge/deb-packagecloud.io-844fec.svg)](https://packagecloud.io/wlanpi)
 
 # wlanpi-hwtest
 
 `hwtest` is a tool for the WLAN Pi project used to update VLI USB controller EEPROMs and run pytest to drive pass/fail testing.
 
-## Example CLI usage
-
-Optional arguments may be passed in to override default behaviors set in `/etc/wlanpi-hwtest/config.ini`. 
+The tests run on WLAN Pi Pro hardware with Debian Trixie. Installing the package doesn't enable or start `wlanpi-hwtest.service`. To run the suite at boot, enable the service:
 
 ```bash
-usage: hwtest [-h] [--debug] [-e] [--oled] [--firmware] [--waveshare] [--buttonsmash] [--verbose] [--version]
+sudo systemctl enable wlanpi-hwtest
+```
+
+## Example CLI Usage
+
+Optional arguments may be passed in to override default behaviors set in `/etc/wlanpi-hwtest/config.ini`.
+
+```text
+usage: hwtest [-h] [--debug] [-e] [--oled] [--firmware] [--waveshare]
+              [--buttonsmash] [--verbose] [--version]
 
 hwtest is a VLI USB Controller EEPROM updater and hardware testing tool for the WLAN Pi Pro.
 
-optional arguments:
+options:
   -h, --help     show this help message and exit
   --debug        enable debug logging output
   -e, --emulate  enable keyboard emulation
@@ -25,26 +32,23 @@ optional arguments:
   --version, -V  show program's version number and exit
 ```
 
-## Buttonsmash mode
+`--firmware` checks the VL805 USB controller EEPROM. If the check fails, it writes new firmware and reboots the WLAN Pi.
 
-- Install hwtest and disable the service
+## Buttonsmash Mode
+
+FPMS and `hwtest` share the display and buttons, so stop FPMS first:
 
 ```bash
 sudo apt update
 sudo apt install wlanpi-hwtest
-sudo systemctl disable wlanpi-hwtest
-```
-
-- Stop FPMS service 
-
-```bash
 sudo systemctl stop wlanpi-fpms
+sudo hwtest --buttonsmash --oled
 ```
 
-- Start `hwtest` in buttonsmash mode with OLED from CLI
+To return to the FPMS menu, press Ctrl-C and start FPMS again:
 
 ```bash
-sudo hwtest --buttons --oled
+sudo systemctl start wlanpi-fpms
 ```
 
 Example:
@@ -57,21 +61,35 @@ Pytest reports for each testing session are saved to `/var/log/wlanpi-hwtest/`:
 
 Example:
 
-```bash
+```text
 $ ls /var/log/wlanpi-hwtest | grep dc
 dca632.fea1a2_report_automated_2021-12-30T175453.html
 dca632.fea1a2_report_interactive_2021-12-30T175453.html
 ```
 
+## Development & Contributing
+
+See [WLAN-Pi/developers](https://github.com/WLAN-Pi/developers) for branch strategy, commit conventions, and setup guides. The pytest files under `hwtest/` are the device suite and need WLAN Pi Pro hardware. Repo-specific commands:
+
+```bash
+tox                  # install with the pinned deps, byte-compile, lint, check formatting
+tox -e lint          # ruff check
+tox -e format        # ruff format and safe fixes
+```
+
+## Changelog
+
+See [debian/changelog](debian/changelog) for version history.
+
 ## Contributors
 
 See [AUTHORS](AUTHORS.md).
 
-## Code of Conduct
+## License
 
-See [CoC](CODE_OF_CONDUCT.md).
+BSD-3-Clause. See [LICENSE](LICENSE).
 
-## OSS
+## Open Source Software
 
 Thank you to all the creators and maintainers of the following open source software used by `hwtest`:
 

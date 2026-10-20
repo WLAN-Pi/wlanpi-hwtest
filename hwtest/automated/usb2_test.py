@@ -27,4 +27,4 @@ def test_g_ether_mod():
         False - not detected
     """
 
-    assert is_module_present("g_ether") == True
+    assert is_module_present("g_ether")
