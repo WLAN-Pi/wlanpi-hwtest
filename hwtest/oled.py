@@ -269,6 +269,6 @@ def init_oled_luma_terminal():
         line_height=15,
         animate=False,
     )
-    cfg.TERMINAL.println(f"WLANPI HWTEST")
+    cfg.TERMINAL.println("WLANPI HWTEST")
     cfg.TERMINAL.println(f"VERSION: {__version__}")
     cfg.TERMINAL.println(f"PLATFORM: {cfg.PLATFORM}")

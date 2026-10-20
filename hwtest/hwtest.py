@@ -11,7 +11,6 @@ wlanpi-hwtest.hwtest
 OK, let's test stuff.
 """
 
-
 import inspect
 import logging
 import os
@@ -42,6 +41,7 @@ def start():
         buttonsmash = cfg.CONFIG.get("GENERAL").get("buttonsmash")
         if oled or buttonsmash:
             import hwtest.buttons as btn  # fmt: skip
+
             btn.init()
         if oled:
             init_oled_luma_terminal()
@@ -221,7 +221,7 @@ def term_pytest_pass_fail_summary(summary: Dict, type: str) -> bool:
     elif fail > 0:
         # f00d https://fontawesome.com/v5.15/icons/times?style=solid
         print_term_icon_and_message(
-            "\uf00d", f"{fail/total:.0%} OF {type.upper()} FAIL"
+            "\uf00d", f"{fail / total:.0%} OF {type.upper()} FAIL"
         )
         return False
     if ok == total:

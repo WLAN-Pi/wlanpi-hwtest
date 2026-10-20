@@ -11,7 +11,7 @@
 # |_| |_|\_/\_/  \__\___||___/\__|
 
 
-""" version information for wlanpi-hwtest """
+"""version information for wlanpi-hwtest"""
 
 __title__ = "hwtest"
 __description__ = "platform testing tools for the WLAN Pi Pro"

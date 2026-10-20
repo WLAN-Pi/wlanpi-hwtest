@@ -17,7 +17,7 @@ def test_i2c_mod():
         False - not detected
     """
 
-    assert is_module_present("i2c") == True
+    assert is_module_present("i2c")
 
 
 # enable i2c: sudo raspi-config nonint do_i2c 0

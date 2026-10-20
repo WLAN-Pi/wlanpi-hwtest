@@ -17,7 +17,7 @@ def test_spi_mod():
         False - not detected
     """
 
-    assert is_module_present("spi_bcm") == True
+    assert is_module_present("spi_bcm")
 
 
 def test_spi_enabled():

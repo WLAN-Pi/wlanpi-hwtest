@@ -119,11 +119,9 @@ def check_and_upgrade_firmware() -> bool:
 
     # if firmware is not expected we need to upgrade it
     if not verify_vl805_firmware():
-
         log.info("Upgrading VL805 EEPROM")
         # try upgrading to our desired version.
         if upgrade_vl805_firmware():
-
             # verify firmware
             if verify_vl805_firmware():
                 log.info("Rebooting to activate verified and reprogrammed EEPROM")

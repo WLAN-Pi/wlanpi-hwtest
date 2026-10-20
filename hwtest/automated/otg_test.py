@@ -35,4 +35,4 @@ def test_cdc_ether_mod():
         If we see cdc_ether loaded then we know communication is established between the 2 USB ports.
     """
 
-    assert is_module_present("cdc_ether") == True
+    assert is_module_present("cdc_ether")

@@ -17,7 +17,7 @@ def test_bt_module():
         False - not detected
     """
 
-    assert is_module_present("bluetooth") == True
+    assert is_module_present("bluetooth")
 
 
 def test_2x_bt_devices():
