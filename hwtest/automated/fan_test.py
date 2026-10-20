@@ -102,4 +102,4 @@ def test_fan_detected():
     resp = run_command(["sensors"])
 
     assert "gpio_fan-isa-0000" in resp
-    assert "fan0" or "fan1" in resp
+    assert "fan0" in resp or "fan1" in resp

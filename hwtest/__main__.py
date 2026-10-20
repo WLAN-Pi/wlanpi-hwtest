@@ -14,7 +14,6 @@ Entry point for hwtest
 import inspect
 import logging
 import os
-import platform
 import signal
 import sys
 
@@ -69,14 +68,6 @@ def init():
     if "linux" not in sys.platform:
         sys.exit(
             "{0} only works on Linux... exiting...".format(os.path.basename(__file__))
-        )
-
-    # hard set no support for python < v3.7
-    if sys.version_info < (3, 7):
-        sys.exit(
-            "{0} requires Python version 3.7 or higher...\nyou are trying to run with Python version {1}...\nexiting...".format(
-                os.path.basename(__file__), platform.python_version()
-            )
         )
 
     if __name__ == "__main__":

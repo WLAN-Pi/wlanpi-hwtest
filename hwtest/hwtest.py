@@ -39,18 +39,18 @@ def start():
 
     try:
         oled = cfg.CONFIG.get("GENERAL").get("oled")
-        if oled:
+        buttonsmash = cfg.CONFIG.get("GENERAL").get("buttonsmash")
+        if oled or buttonsmash:
             import hwtest.buttons as btn  # fmt: skip
             btn.init()
+        if oled:
             init_oled_luma_terminal()
 
         verbose = cfg.CONFIG.get("GENERAL").get("verbose")
-        buttonsmash = cfg.CONFIG.get("GENERAL").get("buttonsmash")
         log.debug("buttonsmash: %s" % buttonsmash)
         if buttonsmash:
             log.info("BUTTON SMASH MODE.")
             log.info("GO HAM. (:")
-            import hwtest.buttons as btn  # fmt: skip
             if cfg.CONFIG.get("GENERAL").get("oled"):
                 cfg.TERMINAL.println("BUTTON SMASH MODE.")
                 cfg.TERMINAL.println("GO HAM. (:")

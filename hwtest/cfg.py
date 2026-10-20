@@ -13,7 +13,7 @@ module for sharing conf and objects across hwtest
 
 import logging
 import os
-from datetime import datetime
+from datetime import UTC, datetime
 
 from PIL import ImageFont
 
@@ -89,7 +89,7 @@ def setup_buttons():
 
 def now():
     """yyyy-MM-ddThhmmss (1980-12-01T221030"""
-    return datetime.utcnow().strftime("%Y-%m-%dT%H%M%S")
+    return datetime.now(UTC).strftime("%Y-%m-%dT%H%M%S")
 
 
 def get_eth0_mac():
