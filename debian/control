@@ -35,7 +35,7 @@ Depends: ${misc:Depends},
          figlet,
          lm-sensors,
          raspi-config,
-         raspi-gpio,
+         raspi-utils-core,
          util-linux,
          libopenjp2-7
 Description: WLAN Pi - platform testing tools
