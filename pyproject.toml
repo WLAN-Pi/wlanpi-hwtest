@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=77.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hwtest"
+description = "platform testing tools for the WLAN Pi Pro"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "BSD-3-Clause"
+dynamic = ["version", "dependencies"]
+authors = [
+    {name = "Josh Schmelzle", email = "josh@joshschmelzle.com"},
+]
+classifiers = [
+    "Natural Language :: English",
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3.13",
+    "Intended Audience :: System Administrators",
+    "Topic :: Utilities",
+]
+
+[project.urls]
+Documentation = "https://docs.wlanpi.com"
+Source = "https://github.com/wlan-pi/wlanpi-hwtest"
+
+[project.scripts]
+hwtest = "hwtest.__main__:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["hwtest*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "hwtest.__version__.__version__"}
+dependencies = {file = ["requirements.txt"]}
