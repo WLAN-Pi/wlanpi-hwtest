@@ -13,11 +13,11 @@ def test_turn_on_fan():
     """
     Turn fan on:
 
-        raspi-gpio set 26 op pd dh
+        pinctrl set 26 op pd dh
     """
 
     ret_code = run_command(
-        ["raspi-gpio", "set", "26", "op", "pd", "dh"], return_exit_values=True
+        ["pinctrl", "set", "26", "op", "pd", "dh"], return_exit_values=True
     )
 
     time.sleep(5)
@@ -29,11 +29,11 @@ def test_turn_off_fan():
     """
     Turn fan on:
 
-        raspi-gpio set 26 op pd dl
+        pinctrl set 26 op pd dl
     """
 
     ret_code = run_command(
-        ["raspi-gpio", "set", "26", "op", "pd", "dl"], return_exit_values=True
+        ["pinctrl", "set", "26", "op", "pd", "dl"], return_exit_values=True
     )
 
     assert ret_code == 0
@@ -55,14 +55,14 @@ def test_gpio_fan_mod():
 def test_gpio_fan_conf():
     """
     Test command:
-        read /boot/config.txt
+        read /boot/firmware/config.txt
 
     Results:
         True - "gpio-fan" exists in config.txt
         False - "gpio-fan" not found in config.txt
     """
 
-    with open("/boot/config.txt", "r") as f:
+    with open("/boot/firmware/config.txt", "r") as f:
         config_lines = f.readlines()
 
     results = [r for r in config_lines if "gpio-fan" in r]
