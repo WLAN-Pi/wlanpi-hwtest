@@ -20,7 +20,6 @@ import os
 import shutil
 import signal
 import sys
-from distutils.util import strtobool
 from typing import Any, Dict
 
 import hwtest.cfg as cfg
@@ -153,10 +152,7 @@ def ConfigParser_to_Dict(config: configparser.ConfigParser) -> Dict:
     for section in config.sections():
         _dict[section] = {}
         for key, _value in config.items(section):
-            try:
-                _value = bool(strtobool(_value))  # type: ignore
-            except ValueError:
-                pass
+            _value = config.BOOLEAN_STATES.get(_value.lower(), _value)
             _dict[section][key] = _value
     return _dict
 

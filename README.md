@@ -78,7 +78,7 @@ Thank you to all the creators and maintainers of the following open source softw
 * [dh-virtualenv](https://github.com/spotify/dh-virtualenv)
 * [FIGlet](http://www.figlet.org/)
 * [Font Awesome](https://fontawesome.com)
-* [GPIO Zero](https://gpiozero.readthedocs.io/en/stable)
+* [libgpiod](https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git)
 * [Luma.OLED](https://luma-oled.readthedocs.io/en/latest)
 * [Pillow](https://python-pillow.org)
 * [Pytest](https://pytest.org)

@@ -17,18 +17,17 @@ import sys
 import termios
 import threading
 import tty
+from datetime import timedelta
 
-from gpiozero import Button as GPIO_Button
-from gpiozero import Device
-from gpiozero.pins.mock import MockFactory
+import gpiod
+from gpiod.line import Bias, Edge
 
 import hwtest.cfg as cfg
 from hwtest.oled import print_term_icon_and_message
-from hwtest.platform import (
-    PLATFORM,
-    PLATFORM_M4,
-    PLATFORM_R4,
-)
+from hwtest.platform import PLATFORM_R4
+
+# Pi 3/4 and CM4 expose the header GPIOs on gpiochip0.
+GPIO_CHIP = "/dev/gpiochip0"
 
 # Button mapping for the WLAN Pi Pro v1 Rev1
 BUTTONS_WLANPI_PRO_V1_REV1 = {
@@ -87,76 +86,30 @@ def getch():
 
 def button_emulation():
     log = logging.getLogger(inspect.stack()[0][3])
+    keys = {
+        "w": "up",
+        "x": "down",
+        "a": "left",
+        "d": "right",
+        "s": "center",
+        "1": "key1",
+        "2": "key2",
+        "3": "key3",
+    }
     while cfg.RUNNING:
-        char = getch()
+        char = getch().lower()
         log.debug(f"getch() detected {char}")
 
-        if char == "k" or char == "K":
+        if char == "k":
             log.info(
                 "Button emulation stop requested ... Killing button emulation ... Press CTRL-C to exit ..."
             )
             break
 
-        if char == PINS.get("up") or char == "w":
-            log.info("EMULATE BUTTON UP PRESS")
-            BUTTON_UP.pin.drive_low()
-            BUTTON_UP.pin.drive_high()
-            cfg.BUTTONS_PRESSED["BUTTON_UP"] = True
-
-        if char == PINS.get("down") or char == "x":
-            log.info("EMULATE BUTTON DOWN PRESS")
-            BUTTON_DOWN.pin.drive_low()
-            BUTTON_DOWN.pin.drive_high()
-            cfg.BUTTONS_PRESSED["BUTTON_DOWN"] = True
-
-        if char == PINS.get("left") or char == "a":
-            log.info("EMULATE BUTTON LEFT PRESS")
-            BUTTON_LEFT.pin.drive_low()
-            BUTTON_LEFT.pin.drive_high()
-            cfg.BUTTONS_PRESSED["BUTTON_LEFT"] = True
-
-        if char == PINS.get("right") or char == "d":
-            log.info("EMULATE BUTTON RIGHT PRESS")
-            BUTTON_RIGHT.pin.drive_low()
-            BUTTON_RIGHT.pin.drive_high()
-            cfg.BUTTONS_PRESSED["BUTTON_RIGHT"] = True
-
-        if char == PINS.get("center") or char == "s":
-            log.info("EMULATE BUTTON CENTER PRESSED")
-            BUTTON_CENTER.pin.drive_low()
-            BUTTON_CENTER.pin.drive_high()
-            cfg.BUTTONS_PRESSED["BUTTON_CENTER"] = True
-
-        if char == PINS.get("key1") or char == "1":
-            log.info("EMULATE BUTTON KEY1 PRESSED")
-            BUTTON_KEY1.pin.drive_low()
-            BUTTON_KEY1.pin.drive_high()
-            cfg.BUTTONS_PRESSED["BUTTON_KEY1"] = True
-
-        if char == PINS.get("key2") or char == "1":
-            log.info("EMULATE BUTTON KEY2 PRESSED")
-            BUTTON_KEY2.pin.drive_low()
-            BUTTON_KEY2.pin.drive_high()
-            cfg.BUTTONS_PRESSED["BUTTON_KEY2"] = True
-
-        if char == PINS.get("key3") or char == "3":
-            log.info("EMULATE BUTTON KEY3 PRESSED")
-            BUTTON_KEY3.pin.drive_low()
-            BUTTON_KEY3.pin.drive_high()
-            cfg.BUTTONS_PRESSED["BUTTON_KEY3"] = True
-
-
-# this must run before gpiozero button objects are created in order for button emulation to work.
-
-if cfg.CONFIG.get("GENERAL").get("emulate"):
-    Device.pin_factory = MockFactory()
-    log = logging.getLogger(inspect.stack()[0][3])
-    log.info("UP = 'w', DOWN = 'x', LEFT = 'a', RIGHT = 'd', CENTER = 's'")
-    log.info("Press 'k' to break out of button tests.")
-    cfg.BUTTON_EMULATION_THREAD = threading.Thread(
-        name="button_emulator", target=button_emulation
-    )
-    cfg.BUTTON_EMULATION_THREAD.start()
+        name = keys.get(char)
+        if name in PINS:
+            log.info(f"EMULATE BUTTON {name.upper()} PRESS")
+            PRESS_HANDLERS[name]()
 
 
 def _println(pressed, gpio_pin):
@@ -294,46 +247,54 @@ def key2_press():
 
 
 def key3_press():
-    button_press(PINS["key2"])
+    button_press(PINS["key3"])
     cfg.BUTTONS_PRESSED["BUTTON_KEY3"] = True
 
 
-BUTTON_DOWN = None
-BUTTON_UP = None
-BUTTON_LEFT = None
-BUTTON_RIGHT = None
-BUTTON_CENTER = None
-BUTTON_KEY1 = None
-BUTTON_KEY2 = None
-BUTTON_KEY3 = None
+PRESS_HANDLERS = {
+    "up": up_press,
+    "down": down_press,
+    "left": left_press,
+    "right": right_press,
+    "center": center_press,
+    "key1": key1_press,
+    "key2": key2_press,
+    "key3": key3_press,
+}
+
+
+def monitor_buttons(request):
+    handlers = {pin: PRESS_HANDLERS[name] for name, pin in PINS.items()}
+    with request:
+        while cfg.RUNNING:
+            if request.wait_edge_events(timedelta(seconds=1)):
+                for event in request.read_edge_events():
+                    handler = handlers.get(event.line_offset)
+                    if handler:
+                        handler()
 
 
 def init():
-    global BUTTON_DOWN
-    global BUTTON_UP
-    global BUTTON_LEFT
-    global BUTTON_RIGHT
-    global BUTTON_CENTER
-    global BUTTON_KEY1
-    global BUTTON_KEY2
-    global BUTTON_KEY3
+    log = logging.getLogger(inspect.stack()[0][3])
 
-    BUTTON_DOWN = GPIO_Button(PINS["down"])
-    BUTTON_UP = GPIO_Button(PINS["up"])
-    BUTTON_LEFT = GPIO_Button(PINS["left"])
-    BUTTON_RIGHT = GPIO_Button(PINS["right"])
-    BUTTON_CENTER = GPIO_Button(PINS["center"])
+    if cfg.CONFIG.get("GENERAL").get("emulate"):
+        log.info("UP = 'w', DOWN = 'x', LEFT = 'a', RIGHT = 'd', CENTER = 's'")
+        log.info("Press 'k' to break out of button tests.")
+        threading.Thread(
+            name="button_emulator", target=button_emulation, daemon=True
+        ).start()
+        return
 
-    BUTTON_DOWN.when_pressed = down_press
-    BUTTON_UP.when_pressed = up_press
-    BUTTON_LEFT.when_pressed = left_press
-    BUTTON_RIGHT.when_pressed = right_press
-    BUTTON_CENTER.when_pressed = center_press
-
-    if PLATFORM == PLATFORM_R4 or PLATFORM == PLATFORM_M4:
-        BUTTON_KEY1 = GPIO_Button(PINS["key1"])
-        BUTTON_KEY2 = GPIO_Button(PINS["key2"])
-        BUTTON_KEY3 = GPIO_Button(PINS["key3"])
-        BUTTON_KEY1.when_pressed = key1_press
-        BUTTON_KEY2.when_pressed = key2_press
-        BUTTON_KEY3.when_pressed = key3_press
+    settings = gpiod.LineSettings(
+        bias=Bias.PULL_UP,
+        edge_detection=Edge.FALLING,
+        debounce_period=timedelta(microseconds=10),
+    )
+    request = gpiod.request_lines(
+        GPIO_CHIP,
+        consumer="hwtest",
+        config=dict.fromkeys(PINS.values(), settings),
+    )
+    threading.Thread(
+        name="button_monitor", target=monitor_buttons, args=(request,), daemon=True
+    ).start()
