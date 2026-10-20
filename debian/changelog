@@ -1,3 +1,14 @@
+wlanpi-hwtest (1.2.0-1) unstable; urgency=medium
+
+  * Trixie: Python 3.13 venv, pinctrl and /boot/firmware/config.txt
+    paths
+  * Buttons read through gpiod; luma.core 2.6.0, luma.oled 3.13.0,
+    luma.lcd 2.11.0
+  * Installing no longer enables or starts wlanpi-hwtest.service
+  * Fix fan test assertion that always passed
+
+ -- Josh Schmelzle <josh@joshschmelzle.com>  Tue, 20 Oct 2026 17:05:16 -0400
+
 wlanpi-hwtest (1.1.0-beta3) unstable; urgency=high
 
   * Security: Pillow 12.3.0 (CVE fixes: PSD OOB writes, FITS decompression
