@@ -28,6 +28,7 @@ jobs:
     with:
       pkg: wlanpi-hwtest
       version: ${{ needs.format.outputs.version }}
+      distros: '["trixie"]'
 
   slack-workflow-status:
     if: ${{ always() && github.repository_owner == 'WLAN-Pi' && ! github.event.pull_request.head.repo.fork }}

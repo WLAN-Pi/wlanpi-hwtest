@@ -34,6 +34,7 @@ jobs:
     with:
       pkg: wlanpi-hwtest
       version: ${{ needs.format.outputs.version }}
+      distros: '["trixie"]'
     secrets: inherit
 
   tag:

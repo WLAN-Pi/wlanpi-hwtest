@@ -24,7 +24,7 @@ Build-Depends: debhelper-compat (= 13),
                tcl8.6-dev,
                tk8.6-dev,
                zlib1g-dev,
-Standards-Version: 4.7.0
+Standards-Version: 4.7.2
 X-Python3-Version: >= 3.13
 Homepage: https://github.com/WLAN-Pi/wlanpi-hwtest
 
