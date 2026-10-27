@@ -1,0 +1,4 @@
+# dh_virtualenv installs this add-on application and its dependencies under
+# /opt/wlanpi-hwtest. /opt is reserved for add-on software; these packages
+# are not candidates for the Debian archive.
+wlanpi-hwtest: dir-or-file-in-opt
